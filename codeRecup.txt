@@ -1,0 +1,31 @@
+import express from "express";
+import mysql from 'mysql';
+import cors from 'cors';
+import UserRoute from './routes/UserRoute.js'
+
+const app = express();
+
+const db = mysql.createConnection({
+    host: "localhost",
+    root: "root",
+    password: "",
+    database: "doukafa_db"
+})
+
+app.use(express.json());
+app.use(cors());
+
+app.get("/users", (request, response)=>{
+    const query = "select * from user";
+    db.query(query, (err, data)=>{
+        if(err){
+            return response.json(err);
+        }else{
+            return response.json(data);
+        }
+    })
+})
+
+app.listen(5000, ()=>{
+    console.log("Connection to backsend.")
+})
