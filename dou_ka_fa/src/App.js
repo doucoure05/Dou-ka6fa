@@ -7,10 +7,10 @@ import {
   Link,
   BrowserRouter,
 } from "react-router-dom";
-import Login from "./components/Login";
-import UserList from "./components/UserList";
-import AddUser from "./components/AddUser";
-import EditUser from "./components/EditUser";
+
+import UserList from "./components/users/UserList";
+
+import ListClient from "./components/clients/ListClient";
 
 function App() {
   return (
@@ -101,9 +101,10 @@ function App() {
           </div>
         </div>
       </nav>
-      <div className="m-4">
+      <div className="bg-secondary">
         <Routes>
-          <Route path="/Home" element={<UserList />}></Route>
+          <Route path="/home" element={<UserList />}></Route>
+          <Route path="/client" element={<ListClient />}></Route>
         </Routes>
       </div>
     </BrowserRouter>
