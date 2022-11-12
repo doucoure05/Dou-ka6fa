@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import "./dist/css/adminlte.min.css";
+import "./dist/css/all.min.css";
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";

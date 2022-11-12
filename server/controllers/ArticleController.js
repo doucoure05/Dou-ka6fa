@@ -1,17 +1,17 @@
-import Client from "../models/Client.js";
+import Article from "../models/Article.js";
 
-export const getClient = async (req, res) => {
+export const getArticle = async (req, res) => {
   try {
-    const response = await Client.findAll();
+    const response = await Article.findAll();
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const getClientById = async (req, res) => {
+export const getArticleById = async (req, res) => {
   try {
-    const response = await Client.findOne({
+    const response = await Article.findOne({
       where: {
         id: req.params.id,
       },
@@ -22,9 +22,9 @@ export const getClientById = async (req, res) => {
   }
 };
 
-export const createClient = async (req, res) => {
+export const createArticle = async (req, res) => {
   try {
-    await Client.create(req.body);
+    await Article.create(req.body);
     res.status(201).json({ msg: "success" });
   } catch (error) {
     console.log(error.message);
@@ -32,9 +32,9 @@ export const createClient = async (req, res) => {
   }
 };
 
-export const updateClient = async (req, res) => {
+export const updateArticle = async (req, res) => {
   try {
-    await Client.update(req.body, {
+    await Article.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -46,9 +46,9 @@ export const updateClient = async (req, res) => {
   }
 };
 
-export const deleteClient = async (req, res) => {
+export const deleteArticle = async (req, res) => {
   try {
-    await Client.destroy({
+    await Article.destroy({
       where: {
         id: req.params.id,
       },

@@ -1,17 +1,17 @@
-import Client from "../models/Client.js";
+import Categorie from "../models/Categorie.js";
 
-export const getClient = async (req, res) => {
+export const getCategorie = async (req, res) => {
   try {
-    const response = await Client.findAll();
+    const response = await Categorie.findAll();
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const getClientById = async (req, res) => {
+export const getCategorieById = async (req, res) => {
   try {
-    const response = await Client.findOne({
+    const response = await Categorie.findOne({
       where: {
         id: req.params.id,
       },
@@ -22,9 +22,9 @@ export const getClientById = async (req, res) => {
   }
 };
 
-export const createClient = async (req, res) => {
+export const createCategorie = async (req, res) => {
   try {
-    await Client.create(req.body);
+    await Categorie.create(req.body);
     res.status(201).json({ msg: "success" });
   } catch (error) {
     console.log(error.message);
@@ -32,9 +32,9 @@ export const createClient = async (req, res) => {
   }
 };
 
-export const updateClient = async (req, res) => {
+export const updateCategorie = async (req, res) => {
   try {
-    await Client.update(req.body, {
+    await Categorie.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -46,9 +46,9 @@ export const updateClient = async (req, res) => {
   }
 };
 
-export const deleteClient = async (req, res) => {
+export const deleteCategorie = async (req, res) => {
   try {
-    await Client.destroy({
+    await Categorie.destroy({
       where: {
         id: req.params.id,
       },

@@ -1,52 +1,90 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Client from "../../models/Client";
-import * as service from "../../services/ClientService";
+import Article from "../../models/Article.js";
+import * as service from "../../services/ArticleService";
 
-import ClientModal from "./ClientModal";
+import * as categorieService from "../../services/CategorieService";
+
+import ArticleModal from "./ArticleModal";
 
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import Categorie from "../../models/Categorie.js";
 
-export default class ListClient extends Component {
+export default class ListArticle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listClient: [],
+      listArticle: [],
       toastShow: false,
       toastLibelle: "",
+      listCategorie: [],
     };
   }
 
-  getLIstClient() {
-    service.getClient().then((clients) => {
+  getCategorieName = (id) => {
+    let cat =
+      this.state.listCategorie.filter((c) => c.id === id).length > 0
+        ? this.state.listCategorie.filter((c) => c.id === id)[0]
+        : null;
+    if (cat != null) {
+      return cat.nom;
+    } else return "";
+    // return cat.nom;
+  };
+
+  getLIstCategorie() {
+    categorieService.getCategorie().then((categories) => {
       let list = [];
-      clients.forEach((client) => {
-        let cl = new Client(
-          client.id,
-          client.nom,
-          client.prenom,
-          client.telephone,
-          client.adresse,
-          client.photo
-        );
+      categories.forEach((categorie) => {
+        let cl = new Categorie(categorie.id, categorie.nom);
         list.push(cl);
       });
       this.setState(
         {
-          listClient: list,
+          listCategorie: list,
         },
-        () => {}
+        () => {
+          //   console.log(this.state.listCategorie);
+        }
       );
     });
   }
 
-  componentDidMount() {
-    this.getLIstClient();
+  getLIstArticle() {
+    service.getArticle().then((articles) => {
+      let list = [];
+      articles.forEach((article) => {
+        let ar = new Article(
+          article.id,
+          article.nom,
+          article.description,
+          article.qteJour,
+          article.prix,
+          article.photo,
+          article.point,
+          article.categorieId
+        );
+        list.push(ar);
+      });
+      this.setState(
+        {
+          listArticle: list,
+        },
+        () => {
+          //   console.log(this.state.listArticle);
+        }
+      );
+    });
   }
-  onSave = (client) => {
-    service.saveClient(client).then((result) => {
-      this.getLIstClient();
+  componentDidMount() {
+    this.getLIstArticle();
+    this.getLIstCategorie();
+  }
+
+  onSave = (article) => {
+    service.saveArticle(article).then((result) => {
+      this.getLIstArticle();
       let msg =
         result.msg === "success"
           ? "Ajout effectué avec succès."
@@ -54,9 +92,9 @@ export default class ListClient extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onUpdate = (client) => {
-    service.updateClient(client).then((result) => {
-      this.getLIstClient();
+  onUpdate = (article) => {
+    service.updateArticle(article).then((result) => {
+      this.getLIstArticle();
       let msg =
         result.msg === "success"
           ? "Modification effectué avec succès."
@@ -64,9 +102,9 @@ export default class ListClient extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onDelete = (client) => {
-    service.deleteClient(client.id).then((result) => {
-      this.getLIstClient();
+  onDelete = (article) => {
+    service.deleteArticle(article.id).then((result) => {
+      this.getLIstArticle();
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
@@ -88,7 +126,7 @@ export default class ListClient extends Component {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Liste des clients</h1>
+                <h1>Liste des articles</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -97,7 +135,7 @@ export default class ListClient extends Component {
                       Acceuil
                     </Link>
                   </li>
-                  <li className="breadcrumb-item active">Liste des clients</li>
+                  <li className="breadcrumb-item active">Liste des articles</li>
                 </ol>
               </div>
             </div>
@@ -105,16 +143,16 @@ export default class ListClient extends Component {
         </section>
         <section className="content">
           <div className="container-fluid">
-            {/* <Link to="/client/add" className="button is-success">
+            {/* <Link to="/article/add" className="button is-success">
             {
               //Ajouter l'cone plus ici
             }
-            Nouveau client
+            Nouveau article
           </Link> */}
-            <ClientModal
-              libelle={"Nouveau Client"}
+            <ArticleModal
+              libelle={"Nouvel Article"}
               add={true}
-              client={null}
+              article={null}
               btnStyle="btn btn-block btn-success"
               btnIcon="bi-plus-circle"
               onSave={this.onSave}
@@ -124,32 +162,30 @@ export default class ListClient extends Component {
                 <tr>
                   <th width={50}>ID</th>
                   <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Téléphone</th>
-                  <th>Adresse</th>
+                  <th>Description</th>
+                  <th>Qte Journalière</th>
+                  <th>Prix</th>
+                  <th>Pt de Fidelité</th>
+                  <th>Catégorie</th>
                   <th width={100}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.listClient.map((client, index) => (
-                  <tr key={client.id}>
-                    <td>{client.id}</td>
-                    <td>{client.nom}</td>
-                    <td>{client.prenom}</td>
-                    <td>{client.telephone}</td>
-                    <td>{client.adresse}</td>
+                {this.state.listArticle.map((article, index) => (
+                  <tr key={article.id}>
+                    <td>{article.id}</td>
+                    <td>{article.nom}</td>
+                    <td>{article.description}</td>
+                    <td>{article.qteJour}</td>
+                    <td>{article.prix}</td>
+                    <td>{article.point}</td>
+                    <td>{this.getCategorieName(article.categorieId)}</td>
+
                     <td>
-                      {/* <Link
-                      to={`edit/${client.id}`}
-                      className="button is-small is-info"
-                    >
-                      Editer
-                    </Link> */}
-                      <ClientModal
-                        // title
+                      <ArticleModal
                         libelle={"Editer"}
                         add={true}
-                        client={client}
+                        article={article}
                         btnStyle="button is-small is-info"
                         onSave={this.onUpdate}
                         onDelete={this.onDelete}
@@ -160,7 +196,7 @@ export default class ListClient extends Component {
                 ))}
               </tbody>
             </table>
-            {this.state.listClient.length > 0 ? null : (
+            {this.state.listArticle.length > 0 ? null : (
               <h2 className="text-center display-4">Aucun élément trouvé</h2>
             )}
           </div>
