@@ -1,21 +1,29 @@
-import {Sequelize} from "sequelize";
+import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
 
-const {DataTypes} = Sequelize;
+const { DataTypes } = Sequelize;
 
-const Article = db.define('articles', {
+const Article = db.define(
+  "articles",
+  {
     nom: DataTypes.STRING,
     description: DataTypes.STRING,
-    qteJour: DataTypes.INT,
+    qteJour: DataTypes.INTEGER,
     prix: DataTypes.DOUBLE,
     photo: DataTypes.STRING,
-    point: DataTypes.INT,
-},{
-    freezeTableName: true
-});
+    point: DataTypes.INTEGER,
+    categorieId: {
+      type: DataTypes.INTEGER,
+      references: { model: "categories", key: "id" },
+    },
+  },
+  {
+    freezeTableName: true,
+  }
+);
 
 export default Article;
 
-(async()=>{
-     await db.sync();
+(async () => {
+  await db.sync();
 })();

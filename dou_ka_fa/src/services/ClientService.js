@@ -8,12 +8,9 @@ export const getClient = async () => {
 
 export const deleteClient = async (id) => {
   try {
-    const response = await axios
-      .delete(`http://localhost:5000/users/${id}`)
-      .then((value) => {
-        console.log(value);
-        return response.data;
-      });
+    const response = await axios.delete(`http://localhost:5000/client/${id}`);
+
+    return response.data;
   } catch (error) {
     console.log(error);
     return null;

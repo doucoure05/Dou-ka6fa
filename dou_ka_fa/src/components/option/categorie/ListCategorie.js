@@ -1,52 +1,47 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Client from "../../models/Client";
-import * as service from "../../services/ClientService";
+import Categorie from "../../../models/Categorie";
+import * as service from "../../../services/CategorieService";
 
-import ClientModal from "./ClientModal";
+import CategorieModal from "./CategorieModal";
 
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 
-export default class ListClient extends Component {
+export default class ListCategorie extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listClient: [],
+      listCategorie: [],
       toastShow: false,
       toastLibelle: "",
     };
   }
 
-  getLIstClient() {
-    service.getClient().then((clients) => {
+  getLIstCategorie() {
+    service.getCategorie().then((categories) => {
       let list = [];
-      clients.forEach((client) => {
-        let cl = new Client(
-          client.id,
-          client.nom,
-          client.prenom,
-          client.telephone,
-          client.adresse,
-          client.photo
-        );
+      categories.forEach((categorie) => {
+        let cl = new Categorie(categorie.id, categorie.nom);
         list.push(cl);
       });
       this.setState(
         {
-          listClient: list,
+          listCategorie: list,
         },
-        () => {}
+        () => {
+          //   console.log(this.state.listCategorie);
+        }
       );
     });
   }
 
   componentDidMount() {
-    this.getLIstClient();
+    this.getLIstCategorie();
   }
-  onSave = (client) => {
-    service.saveClient(client).then((result) => {
-      this.getLIstClient();
+  onSave = (categorie) => {
+    service.saveCategorie(categorie).then((result) => {
+      this.getLIstCategorie();
       let msg =
         result.msg === "success"
           ? "Ajout effectué avec succès."
@@ -54,9 +49,9 @@ export default class ListClient extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onUpdate = (client) => {
-    service.updateClient(client).then((result) => {
-      this.getLIstClient();
+  onUpdate = (categorie) => {
+    service.updateCategorie(categorie).then((result) => {
+      this.getLIstCategorie();
       let msg =
         result.msg === "success"
           ? "Modification effectué avec succès."
@@ -64,13 +59,13 @@ export default class ListClient extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onDelete = (client) => {
-    service.deleteClient(client.id).then((result) => {
-      this.getLIstClient();
+  onDelete = (categorie) => {
+    service.deleteCategorie(categorie.id).then((result) => {
+      this.getLIstCategorie();
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression.";
+          : "Une erreur est intervenu lors de la suppression. Verifier si ola catégorie nest pas utilisé par un article.";
       this.toggleToastShow(msg);
     });
   };
@@ -86,35 +81,25 @@ export default class ListClient extends Component {
       <>
         <section className="content-header">
           <div className="container-fluid">
-            <div className="row mb-2">
+            <div className="row">
               <div className="col-sm-6">
-                <h1>Liste des clients</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link className="nav-link" to="/home">
-                      Acceuil
-                    </Link>
-                  </li>
-                  <li className="breadcrumb-item active">Liste des clients</li>
-                </ol>
+                <h1>Liste des categories</h1>
               </div>
             </div>
           </div>
         </section>
         <section className="content">
           <div className="container-fluid">
-            {/* <Link to="/client/add" className="button is-success">
-            {
-              //Ajouter l'cone plus ici
-            }
-            Nouveau client
-          </Link> */}
-            <ClientModal
-              libelle={"Nouveau Client"}
+            {/* <Link to="/categorie/add" className="button is-success">
+              {
+                //Ajouter l'cone plus ici
+              }
+              Nouveau categorie
+            </Link> */}
+            <CategorieModal
+              libelle={"Nouvelle Catégorie"}
               add={true}
-              client={null}
+              categorie={null}
               btnStyle="btn btn-block btn-success"
               btnIcon="bi-plus-circle"
               onSave={this.onSave}
@@ -122,34 +107,28 @@ export default class ListClient extends Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th width={50}>ID</th>
+                  <th width={100}>ID</th>
                   <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Téléphone</th>
-                  <th>Adresse</th>
                   <th width={100}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.listClient.map((client, index) => (
-                  <tr key={client.id}>
-                    <td>{client.id}</td>
-                    <td>{client.nom}</td>
-                    <td>{client.prenom}</td>
-                    <td>{client.telephone}</td>
-                    <td>{client.adresse}</td>
+                {this.state.listCategorie.map((categorie, index) => (
+                  <tr key={categorie.id}>
+                    <td>{categorie.id}</td>
+                    <td>{categorie.nom}</td>
                     <td>
                       {/* <Link
-                      to={`edit/${client.id}`}
-                      className="button is-small is-info"
-                    >
-                      Editer
-                    </Link> */}
-                      <ClientModal
+                        to={`edit/${categorie.id}`}
+                        className="button is-small is-info"
+                      >
+                        Editer
+                      </Link> */}
+                      <CategorieModal
                         // title
                         libelle={"Editer"}
                         add={true}
-                        client={client}
+                        categorie={categorie}
                         btnStyle="button is-small is-info"
                         onSave={this.onUpdate}
                         onDelete={this.onDelete}
@@ -160,7 +139,7 @@ export default class ListClient extends Component {
                 ))}
               </tbody>
             </table>
-            {this.state.listClient.length > 0 ? null : (
+            {this.state.listCategorie.length > 0 ? null : (
               <h2 className="text-center display-4">Aucun élément trouvé</h2>
             )}
           </div>

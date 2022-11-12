@@ -12,6 +12,7 @@ export default class ClientModal extends Component {
     this.state = {
       show: false,
       client: null,
+      formOK: false,
     };
   }
 
@@ -22,11 +23,14 @@ export default class ClientModal extends Component {
       //Vider tous les champs ici
       client: null,
       show: false,
+      formOK: false,
     });
   };
   handleShow = () => {
     this.setState({
       show: true,
+      client: this.props.client,
+      formOK: this.props.client != null,
     });
   };
 
@@ -34,11 +38,46 @@ export default class ClientModal extends Component {
     // console.log(this.state);
     let fieldName = event.target.name;
     let fleldVal = event.target.value;
-    this.setState({
-      client: {
-        ...this.state.client,
-        [fieldName]: fleldVal,
+    this.setState(
+      {
+        client: {
+          ...this.state.client,
+          [fieldName]: fleldVal,
+        },
       },
+      () => {
+        this.checkForm();
+      }
+    );
+  }
+
+  checkForm() {
+    let isnom = false;
+    let isprenom = false;
+    let istelephone = false;
+    let isadresse = false;
+    if (this.state.client.nom != null) {
+      if (this.state.client.nom.length > 0) {
+        isnom = true;
+      }
+    }
+    if (this.state.client.prenom != null) {
+      if (this.state.client.prenom.length > 0) {
+        isprenom = true;
+      }
+    }
+    if (this.state.client.telephone != null) {
+      if (this.state.client.telephone.length > 0) {
+        istelephone = true;
+      }
+    }
+    if (this.state.client.adresse != null) {
+      if (this.state.client.adresse.length > 0) {
+        isadresse = true;
+      }
+    }
+    this.setState({
+      formOK: isnom && isprenom && istelephone && isadresse,
     });
   }
 
@@ -65,9 +104,11 @@ export default class ClientModal extends Component {
   render() {
     return (
       <>
-        <Button className={this.props.btnStyle} onClick={this.handleShow}>
-          {this.props.libelle}
-        </Button>
+        <div className={this.props.client === null ? "mb-4" : ""}>
+          <Button className={this.props.btnStyle} onClick={this.handleShow}>
+            <i className={this.props.btnIcon}></i> {this.props.libelle}
+          </Button>
+        </div>
 
         <Modal
           show={this.state.show}
@@ -75,6 +116,7 @@ export default class ClientModal extends Component {
           // backdrop="static"
           keyboard={false}
           backdrop={false}
+          animation={true}
           centered
           // dialogClassName="modal-90w"
           className="modal-dialog modal-xl"
@@ -141,7 +183,11 @@ export default class ClientModal extends Component {
           </Modal.Body>
           {this.props.client === null ? (
             <Modal.Footer>
-              <Button variant="primary" onClick={this.doSave}>
+              <Button
+                disabled={!this.state.formOK}
+                variant="primary"
+                onClick={this.doSave}
+              >
                 Ajouter
               </Button>
               <Button variant="secondary" onClick={this.handleClose}>
@@ -150,7 +196,11 @@ export default class ClientModal extends Component {
             </Modal.Footer>
           ) : (
             <Modal.Footer>
-              <Button variant="primary" onClick={this.doUpdate}>
+              <Button
+                disabled={!this.state.formOK}
+                variant="primary"
+                onClick={this.doUpdate}
+              >
                 Modifier
               </Button>
               <Button variant="secondary" onClick={this.doDelete}>
