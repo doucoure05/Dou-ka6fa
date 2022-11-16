@@ -4,7 +4,16 @@ import db from "../config/Database.js";
 const {DataTypes} = Sequelize;
 
 const LignePromotion = db.define('lignePromotions', {
-    ligne: DataTypes.STRING,
+    qte: DataTypes.INTEGER,
+    promotionId: {
+        type: DataTypes.INTEGER,
+        references: { model: "promotions", key: "id" },
+    },
+    articleId: {
+        type: DataTypes.INTEGER,
+        references: { model: "articles", key: "id" },
+    },
+
 },{
     freezeTableName: true
 });

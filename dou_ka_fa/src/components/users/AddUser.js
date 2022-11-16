@@ -3,7 +3,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const AddUser = () => {
     const [nom, setNom] = useState("");
+    const [prenom, setPrenom] = useState("");
+    const [telephone, setTelephone] = useState("");
     const [login, setLogin] = useState("");
+    const [profil, setProfil] = useState("");
     const [gender, setGender] = useState("Male");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -13,11 +16,14 @@ const AddUser = () => {
         try {
             await axios.post('http://localhost:5000/users', {
                 nom,
-                login, 
+                prenom,
+                telephone,
+                login,
+                profil,
                 gender, 
                 password
             });
-            navigate("/");
+            navigate("/home");
         } catch (error) {
             console.log(error);
         }
@@ -35,9 +41,27 @@ const AddUser = () => {
                             </div>
                         </div>
                         <div className="fied">
+                            <label className="label">Prenom</label>
+                            <div className="control">
+                                <input type="text" className="input" placeholder='Login' value={prenom} onChange={(e) => { setPrenom(e.target.value) }} />
+                            </div>
+                        </div>
+                        <div className="fied">
+                            <label className="label">Telephone</label>
+                            <div className="control">
+                                <input type="text" className="input" placeholder='Login' value={telephone} onChange={(e) => { setTelephone(e.target.value) }} />
+                            </div>
+                        </div>
+                        <div className="fied">
                             <label className="label">Login</label>
                             <div className="control">
                                 <input type="text" className="input" placeholder='Login' value={login}onChange={(e)=>{setLogin(e.target.value)}}/>
+                            </div>
+                        </div>
+                        <div className="fied">
+                            <label className="label">Profil</label>
+                            <div className="control">
+                                <input type="text" className="input" placeholder='Login' value={profil} onChange={(e) => { setProfil(e.target.value) }} />
                             </div>
                         </div>
                         <div className="fied">

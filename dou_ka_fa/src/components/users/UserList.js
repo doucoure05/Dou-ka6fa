@@ -28,7 +28,7 @@ const UserList = () => {
   return (
     <div className="columns mt-5 is-centered">
       <div className="column is-half">
-        <Link to="/user/add" className="button is-success">
+        <Link to="/add" className="button is-success">
           Add new user
         </Link>
         <table className="table is-striped is-fullwidth">
@@ -36,6 +36,9 @@ const UserList = () => {
             <tr>
               <th>ID</th>
               <th>Nom</th>
+              <th>Prenom</th>
+              <th>Telephone</th>
+              <th>Profil</th>
               <th>Login</th>
               <th>Password</th>
               <th>Action</th>
@@ -46,6 +49,9 @@ const UserList = () => {
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.nom}</td>
+                <td>{user.prenom}</td>
+                <td>{user.telephone}</td>
+                <td>{user.profil}</td>
                 <td>{user.login}</td>
                 <td>{user.password}</td>
                 <td>

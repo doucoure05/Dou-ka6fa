@@ -252,8 +252,8 @@ export default class ArticleModal extends Component {
                   aria-label="Default select example"
                   name="categorieId"
                   value={
-                    this.props.article != null
-                      ? this.props.article.categorieId
+                    this.state.article != null
+                      ? this.state.article.categorieId
                       : 0
                   }
                   onChange={this.handleChange.bind(this)}

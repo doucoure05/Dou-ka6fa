@@ -1,20 +1,36 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import // BrowserRouter as Router,
-// Route,
-// Routes,
-// Link,
-// BrowserRouter,
-"react-router-dom";
+  // Route,
+  // Routes,
+  // Link,
+  // BrowserRouter,
+  "react-router-dom";
+import {
+  //   BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  BrowserRouter,
+} from "react-router-dom";
 
 // import UserList from "./components/users/UserList";
 
 // import ListClient from "./components/clients/ListClient";
 import Base from "./components/Base";
+import Login from "../src/components/Login";
 
 function App() {
   return (
-    <Base />
+    <>
+      <Base />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/base" element={<Base />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </>
+    // <Base />
 
     // <Router>
     //   <nav className="navbar navbar-expand navbar-brand m-2">
