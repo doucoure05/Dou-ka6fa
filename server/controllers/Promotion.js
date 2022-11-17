@@ -1,4 +1,4 @@
-import Promotion from '../models/Promotion';
+import Promotion from '../models/Promotion.js';
 
 export const getPromotion = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ export const getPromotion = async (req, res) => {
 export const getPromotionById = async (req, res) => {
     try {
         const response = await Promotion.findOne({
-            where:{
+            where: {
                 id: req.params.id
             }
         });
@@ -24,35 +24,38 @@ export const getPromotionById = async (req, res) => {
 
 export const createPromotion = async (req, res) => {
     try {
-        await Promotion.create(req.body);       
-        res.status(201).json({msg: "Promotion created"});
+        await Promotion.create(req.body);
+        res.status(201).json({ msg: "Promotion created" });
     } catch (error) {
         console.log(error.message);
+        res.status(201).json({ msg: "Failed to create Promotion" });
     }
 }
 
 export const updatePromotion = async (req, res) => {
     try {
         await Promotion.update(req.body, {
-            where:{
+            where: {
                 id: req.params.id
             }
-        });       
-        res.status(200).json({msg: "Promotion Updated"});
+        });
+        res.status(200).json({ msg: "Promotion Updated" });
     } catch (error) {
         console.log(error.message);
+        res.status(201).json({ msg: "Failed to updated Promotion" });
     }
 }
 
 export const deletePromotion = async (req, res) => {
     try {
         await Promotion.destroy({
-            where:{
+            where: {
                 id: req.params.id
             }
-        });         
-        res.status(200).json({msg: "Promotion deleted"});    
+        });
+        res.status(200).json({ msg: "Promotion deleted" });
     } catch (error) {
         console.log(error.message);
+        res.status(201).json({ msg: "Failed to deleted Promotion" });
     }
 }
