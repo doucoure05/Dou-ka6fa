@@ -8,6 +8,7 @@ const Promotion = db.define(
   {
     prixPromotion: DataTypes.INTEGER,
     datePromotion: DataTypes.DATE,
+    libelle: DataTypes.STRING,
   },
   {
     freezeTableName: true,

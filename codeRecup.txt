@@ -29,3 +29,32 @@ app.get("/users", (request, response)=>{
 app.listen(5000, ()=>{
     console.log("Connection to backsend.")
 })
+
+         <div>ToutMenu</div>;
+                <div className="col-md-3">
+                    <div className="card card-success">
+                        <div className="card-header">
+                            <h3 className="card-title">All together</h3>
+
+                            <div className="card-tools">
+                                <button type="button" className="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false">
+                                    <i className="fas fa-sync-alt"></i>
+                                </button>
+                                <button type="button" className="btn btn-tool" data-card-widget="maximize">
+                                    <i className="fas fa-expand"></i>
+                                </button>
+                                <button type="button" className="btn btn-tool" data-card-widget="collapse">
+                                    <i className="fas fa-minus"></i>
+                                </button>
+                                <button type="button" className="btn btn-tool" data-card-widget="remove">
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {/* <!-- /.card-tools --> */}
+                        </div>
+                        {/* <!-- /.card-header --> */}
+                        <div className="card-body"><span className="text-danger"></span></div>
+                        {/* <!-- /.card-body --> */}
+                    </div>
+                    {/* <!-- /.card --> */}
+                </div>

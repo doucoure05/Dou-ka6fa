@@ -15,6 +15,8 @@ import ListClient from "./clients/ListClient";
 import ListArticle from "./articles/ListArticle";
 import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
+import MenuJourTouMenu from "./promotions-LignePromotion/MenuJourTouMenu.js";
+import AddUser from "./users/AddUser";
 
 export default class Base extends Component {
   constructor(props) {
@@ -191,7 +193,7 @@ export default class Base extends Component {
                               ? "nav-link active"
                               : "nav-link"
                           }
-                          to="/Home"
+                          to="/mjtm"
                           onClick={this.handleActive}
                         >
                           <i className="bi bi-journal"></i> Menu
@@ -256,12 +258,12 @@ export default class Base extends Component {
               <div className="content-wrapper">
                 <Routes>
                   <Route path="/home" element={<UserList />}></Route>
+                  <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
                   <Route path="/article" element={<ListArticle />}></Route>
                   <Route path="/option" element={<Option />}></Route>
-                  <Route
-                    path="/commande"
-                    element={<ListCommandeVente />}
+                  <Route path="/mjtm" element={<MenuJourTouMenu />}></Route>
+                  <Route path="/commande" element={<ListCommandeVente />}
                   ></Route>
                 </Routes>
               </div>

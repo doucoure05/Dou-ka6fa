@@ -8,6 +8,8 @@ import CategorieRoute from "./routes/CategorieRoute.js";
 import SeuilRoute from "./routes/SeuilRoute.js";
 import CommandeRoute from "./routes/CommandeRoute.js";
 import PromotionRoute from "./routes/PromotionRoute.js";
+import PromotionRoute from "./routes/PromotionRoute.js";
+import LignePromotionRoute from "./routes/LignePromotionRoute.js";
 
 const app = express();
 app.use(cors({}));
@@ -19,5 +21,6 @@ app.use(SeuilRoute);
 app.use(ArticleRoute);
 app.use(PromotionRoute);
 app.use(CommandeRoute);
+app.use(LignePromotionRoute);
 
 app.listen(5000, () => console.log("Server up and running!!!"));

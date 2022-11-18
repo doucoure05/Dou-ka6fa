@@ -28,6 +28,7 @@ export const createPromotion = async (req, res) => {
     res.status(201).json({ msg: "Promotion created" });
   } catch (error) {
     console.log(error.message);
+    res.status(201).json({ msg: "Failed to create Promotion" });
   }
 };
 
@@ -41,6 +42,7 @@ export const updatePromotion = async (req, res) => {
     res.status(200).json({ msg: "Promotion Updated" });
   } catch (error) {
     console.log(error.message);
+    res.status(201).json({ msg: "Failed to updated Promotion" });
   }
 };
 
@@ -54,5 +56,6 @@ export const deletePromotion = async (req, res) => {
     res.status(200).json({ msg: "Promotion deleted" });
   } catch (error) {
     console.log(error.message);
+    res.status(201).json({ msg: "Failed to deleted Promotion" });
   }
 };
