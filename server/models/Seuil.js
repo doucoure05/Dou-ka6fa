@@ -3,18 +3,18 @@ import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const Promotion = db.define(
-  "promotions",
+const Seuil = db.define(
+  "seuil",
   {
-    prixPromotion: DataTypes.INTEGER,
-    datePromotion: DataTypes.DATE,
+    point: DataTypes.INTEGER,
+    montant: DataTypes.DOUBLE,
   },
   {
     freezeTableName: true,
   }
 );
 
-export default Promotion;
+export default Seuil;
 
 (async () => {
   await db.sync();

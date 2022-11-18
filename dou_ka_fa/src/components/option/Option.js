@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ListCategorie from "./categorie/ListCategorie";
+import ListSeuil from "./seuil/ListSeuil";
 
 export default class Option extends Component {
   render() {
@@ -38,7 +39,7 @@ export default class Option extends Component {
                 <ListCategorie />
               </Tab>
               <Tab eventKey="seuil" title="Seuil">
-                Seuil
+                <ListSeuil />
               </Tab>
             </Tabs>
           </div>
