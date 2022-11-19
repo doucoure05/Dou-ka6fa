@@ -343,7 +343,7 @@ export default class Base extends Component {
               <div className="content-wrapper">
                 <Routes>
                   <Route path="/" element={<Dashboard />}></Route>
-                  <Route path="/article" element={<Article />}></Route>
+                  <Route path="/article" element={<ListArticle />}></Route>
                   <Route path="/home" element={<Dashboard />}></Route>
                   <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
