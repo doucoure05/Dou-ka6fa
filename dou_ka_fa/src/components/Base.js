@@ -15,9 +15,10 @@ import ListClient from "./clients/ListClient";
 import ListArticle from "./articles/ListArticle";
 import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
-import MenuJourTouMenu from "./promotions-LignePromotion/MenuJourTouMenu.js";
+//import MenuJourTouMenu from "./promotions-LignePromotion/MenuJourTouMenu.js";
 import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
+import Article from "../models/Article";
 
 export default class Base extends Component {
   constructor(props) {
@@ -342,10 +343,11 @@ export default class Base extends Component {
               <div className="content-wrapper">
                 <Routes>
                   <Route path="/" element={<Dashboard />}></Route>
+                  <Route path="/article" element={<Article />}></Route>
                   <Route path="/home" element={<Dashboard />}></Route>
                   <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
-                  <Route path="/article" element={<MenuJourTouMenu />}></Route>
+                  {/* <Route path="/article" element={<MenuJourTouMenu />}></Route> */}
                   <Route path="/option" element={<Option />}></Route>
                   <Route path="/menu" element={<ListArticle />}></Route>
                   <Route
