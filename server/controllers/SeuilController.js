@@ -1,32 +1,17 @@
-import Article from "../models/Article.js";
+import Seuil from "../models/Seuil.js";
 
-export const getArticle = async (req, res) => {
+export const getSeuil = async (req, res) => {
   try {
-    const response = await Article.findAll({
-      order: [["nom", "ASC"]],
-    });
+    const response = await Seuil.findAll();
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const getArticleById = async (req, res) => {
+export const createSeuil = async (req, res) => {
   try {
-    const response = await Article.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.status(200).json(response);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-export const createArticle = async (req, res) => {
-  try {
-    await Article.create(req.body);
+    await Seuil.create(req.body);
     res.status(201).json({ msg: "success" });
   } catch (error) {
     console.log(error.message);
@@ -34,9 +19,9 @@ export const createArticle = async (req, res) => {
   }
 };
 
-export const updateArticle = async (req, res) => {
+export const updateSeuil = async (req, res) => {
   try {
-    await Article.update(req.body, {
+    await Seuil.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -48,9 +33,9 @@ export const updateArticle = async (req, res) => {
   }
 };
 
-export const deleteArticle = async (req, res) => {
+export const deleteSeuil = async (req, res) => {
   try {
-    await Article.destroy({
+    await Seuil.destroy({
       where: {
         id: req.params.id,
       },

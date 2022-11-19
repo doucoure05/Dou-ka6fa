@@ -1,33 +1,30 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Categorie from "../../../models/Categorie";
-import * as service from "../../../services/CategorieService";
-
-import CategorieModal from "./CategorieModal";
+import Seuil from "../../../models/Seuil";
+import * as service from "../../../services/SeuilService";
+import SeuilModal from "./SeuilModal";
 
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 
-export default class ListCategorie extends Component {
+export default class ListSeuil extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listCategorie: [],
+      listSeuil: [],
       toastShow: false,
       toastLibelle: "",
     };
   }
-
-  getLIstCategorie() {
-    service.getCategorie().then((categories) => {
+  getListSeuil() {
+    service.getSeuil().then((seuils) => {
       let list = [];
-      categories.forEach((categorie) => {
-        let cl = new Categorie(categorie.id, categorie.nom);
+      seuils.forEach((seuil) => {
+        let cl = new Seuil(seuil);
         list.push(cl);
       });
       this.setState(
         {
-          listCategorie: list,
+          listSeuil: list,
         },
         () => {
           //   console.log(this.state.listCategorie);
@@ -36,12 +33,9 @@ export default class ListCategorie extends Component {
     });
   }
 
-  componentDidMount() {
-    this.getLIstCategorie();
-  }
-  onSave = (categorie) => {
-    service.saveCategorie(categorie).then((result) => {
-      this.getLIstCategorie();
+  onSave = (seuil) => {
+    service.saveSeuil(seuil).then((result) => {
+      this.getListSeuil();
       let msg =
         result.msg === "success"
           ? "Ajout effectué avec succès."
@@ -49,9 +43,9 @@ export default class ListCategorie extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onUpdate = (categorie) => {
-    service.updateCategorie(categorie).then((result) => {
-      this.getLIstCategorie();
+  onUpdate = (seuil) => {
+    service.updateSeuil(seuil).then((result) => {
+      this.getListSeuil();
       let msg =
         result.msg === "success"
           ? "Modification effectué avec succès."
@@ -59,9 +53,10 @@ export default class ListCategorie extends Component {
       this.toggleToastShow(msg);
     });
   };
-  onDelete = (categorie) => {
-    service.deleteCategorie(categorie.id).then((result) => {
-      this.getLIstCategorie();
+
+  onDelete = (seuil) => {
+    service.deleteSeuil(seuil.id).then((result) => {
+      this.getListSeuil();
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
@@ -69,13 +64,16 @@ export default class ListCategorie extends Component {
       this.toggleToastShow(msg);
     });
   };
+
+  componentDidMount() {
+    this.getListSeuil();
+  }
   toggleToastShow = (libelle) => {
     this.setState({
       toastShow: !this.state.toastShow,
       toastLibelle: libelle,
     });
   };
-
   render() {
     return (
       <>
@@ -83,40 +81,35 @@ export default class ListCategorie extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-sm-6">
-                <h1>Liste des categories</h1>
+                <h1>Seuil du point de fidelité</h1>
               </div>
             </div>
           </div>
         </section>
         <section className="content">
           <div className="container-fluid">
-            {/* <Link to="/categorie/add" className="button is-success">
-              {
-                //Ajouter l'cone plus ici
-              }
-              Nouveau categorie
-            </Link> */}
-            <CategorieModal
-              libelle={"Nouvelle Catégorie"}
-              add={true}
-              categorie={null}
-              btnStyle="btn btn-block btn-success"
-              btnIcon="bi-plus-circle"
-              onSave={this.onSave}
-            />
+            {this.state.listSeuil.length > 0 ? null : (
+              <SeuilModal
+                libelle={"Ajouter le seuil"}
+                seuil={null}
+                btnStyle="btn btn-block btn-success"
+                onSave={this.onSave}
+                btnIcon="bi-plus-circle"
+              />
+            )}
             <table className="table">
               <thead>
                 <tr>
-                  <th width={100}>#</th>
-                  <th>Nom</th>
+                  <th>Point seuil</th>
+                  <th>Montant du seuil</th>
                   <th width={100}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.listCategorie.map((categorie, index) => (
-                  <tr key={categorie.id}>
-                    <td>{index + 1}</td>
-                    <td>{categorie.nom}</td>
+                {this.state.listSeuil.map((seuil, index) => (
+                  <tr key={seuil.id}>
+                    <td>{seuil.point}</td>
+                    <td>{seuil.montant}</td>
                     <td>
                       {/* <Link
                         to={`edit/${categorie.id}`}
@@ -124,11 +117,9 @@ export default class ListCategorie extends Component {
                       >
                         Editer
                       </Link> */}
-                      <CategorieModal
-                        // title
+                      <SeuilModal
                         libelle={"Editer"}
-                        add={true}
-                        categorie={categorie}
+                        seuil={seuil}
                         btnStyle="button is-small is-info"
                         onSave={this.onUpdate}
                         onDelete={this.onDelete}
@@ -139,12 +130,13 @@ export default class ListCategorie extends Component {
                 ))}
               </tbody>
             </table>
-            {this.state.listCategorie.length > 0 ? null : (
-              <h2 className="text-center display-4">Aucun élément trouvé</h2>
+            {this.state.listSeuil.length > 0 ? null : (
+              <h2 className="text-center display-4">
+                Ajouter un seuil pour la gestion des points de fidelité
+              </h2>
             )}
           </div>
         </section>
-
         <ToastContainer className="p-3" position="top-end">
           <Toast
             show={this.state.toastShow}

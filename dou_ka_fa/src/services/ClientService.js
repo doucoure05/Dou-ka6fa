@@ -26,6 +26,7 @@ export const updateClient = async (client) => {
         prenom: client.prenom,
         telephone: client.telephone,
         adresse: client.adresse,
+        point: client.point,
         photo: client.photo,
       }
     );
@@ -43,6 +44,7 @@ export const saveClient = async (client) => {
       prenom: client.prenom,
       telephone: client.telephone,
       adresse: client.adresse,
+      point: client.point,
       photo: client.photo,
     });
     return response.data;

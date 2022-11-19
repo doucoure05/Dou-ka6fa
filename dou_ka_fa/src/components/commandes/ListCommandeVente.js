@@ -28,20 +28,34 @@ export default class ListCommandeVente extends Component {
             </div>
           </div>
         </section>
+        <div className="dropdown-divider"></div>
         <section className="content">
           <div className="container-fluid">
-            <Tabs
-              defaultActiveKey="commandes"
-              id="option-tab"
-              className="myTab"
-            >
-              <Tab eventKey="commandes" title="Commandes">
-                <ListeCommande />
-              </Tab>
-              <Tab eventKey="ventes" title="Ventes">
-                <ListVente />
-              </Tab>
-            </Tabs>
+            {/* <div className="row">
+              <div className="col-md-12">
+                <div className="card card-secondary card-outline">
+                  <div className="card-header">
+                    <h3 className="card-title">Commande en cours</h3>
+                  </div>
+                  <div className="card-body">
+                    <ListeCommande />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card card-secondary card-outline">
+                  <div className="card-header">
+                    <h3 className="card-title">Liste des ventes</h3>
+                  </div>
+                  <div className="card-body">
+                    <ListVente />
+                  </div>
+                </div>
+              </div>
+            </div> */}
+            <ListVente />
           </div>
         </section>
       </>

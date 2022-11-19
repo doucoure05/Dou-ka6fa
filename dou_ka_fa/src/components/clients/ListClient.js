@@ -28,6 +28,7 @@ export default class ListClient extends Component {
           client.prenom,
           client.telephone,
           client.adresse,
+          client.point,
           client.photo
         );
         list.push(cl);
@@ -127,6 +128,7 @@ export default class ListClient extends Component {
                   <th>Prénom</th>
                   <th>Téléphone</th>
                   <th>Adresse</th>
+                  <th>Pt Fidelité</th>
                   <th width={100}>Action</th>
                 </tr>
               </thead>
@@ -138,6 +140,7 @@ export default class ListClient extends Component {
                     <td>{client.prenom}</td>
                     <td>{client.telephone}</td>
                     <td>{client.adresse}</td>
+                    <td>{client.point}</td>
                     <td>
                       {/* <Link
                       to={`edit/${client.id}`}
