@@ -1,8 +1,8 @@
 export default class LignePromotion {
-    constructor(id, qte, promotionId, articleId) {
-        this.id = id;
-        this.qte = qte;
-        this.promotionId = promotionId;
-        this.articleId = articleId;
-    }
+  constructor(ligne) {
+    this.id = ligne.id;
+    this.qte = ligne.qte;
+    this.promotionId = ligne.promotionId;
+    this.articleId = ligne.articleId;
+  }
 }

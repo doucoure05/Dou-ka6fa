@@ -2,7 +2,9 @@ import Article from "../models/Article.js";
 
 export const getArticle = async (req, res) => {
   try {
-    const response = await Article.findAll();
+    const response = await Article.findAll({
+      order: [["nom", "ASC"]],
+    });
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);

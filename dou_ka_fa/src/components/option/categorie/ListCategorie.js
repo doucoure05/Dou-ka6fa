@@ -107,7 +107,7 @@ export default class ListCategorie extends Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th width={100}>ID</th>
+                  <th width={100}>#</th>
                   <th>Nom</th>
                   <th width={100}>Action</th>
                 </tr>
@@ -115,7 +115,7 @@ export default class ListCategorie extends Component {
               <tbody>
                 {this.state.listCategorie.map((categorie, index) => (
                   <tr key={categorie.id}>
-                    <td>{categorie.id}</td>
+                    <td>{index + 1}</td>
                     <td>{categorie.nom}</td>
                     <td>
                       {/* <Link

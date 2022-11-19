@@ -17,6 +17,7 @@ import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
 import MenuJourTouMenu from "./promotions-LignePromotion/MenuJourTouMenu.js";
 import AddUser from "./users/AddUser";
+import Dashboard from "./dashboard/Dashboard";
 
 export default class Base extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ export default class Base extends Component {
     return (
       <>
         <BrowserRouter>
-          <div className="hold-transition sidebar-mini">
+          <div className="hold-transition layout-top-nav">
             <div className="wrapper">
               {/* <nav className="navbar bg-light fixed-top">
             <div className="container-fluid">
@@ -136,8 +137,107 @@ export default class Base extends Component {
               </div>
             </div>
           </nav> */}
-              <nav className="main-header navbar navbar-expand navbar-white navbar-light"></nav>
-              <aside className="main-sidebar sidebar-dark-primary elevation-4">
+              <nav className="main-header navbar navbar-expand-md navbar-light navbar-white">
+                <div className="container">
+                  <div className="navbar-brand">
+                    <img
+                      src="/images/panier.png"
+                      alt="AdminLTE Logo"
+                      className="brand-image img-circle elevation-3"
+                      style={{ opacity: ".8", marginTop: "5px" }}
+                    />
+                    <span
+                      className="brand-text font-weight-light"
+                      style={{ marginTop: "5px", marginLeft: "5px" }}
+                    >
+                      Doun Ka Fa
+                    </span>
+                  </div>
+                  <div className=" navbar-collapse order-3" id="navbarCollapse">
+                    <ul className="navbar-nav">
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Acceuil"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/home"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-house"></i> Acceuil
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Menu"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/menu"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-journal"></i> Menu
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Commande/Vente"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/commande"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-cash-coin"></i> Commande/Vente
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Client"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/client"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-house"></i> Client
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Articles"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/article"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-house"></i> Articles
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                          className={
+                            this.state.active === "Options"
+                              ? "nav-link active"
+                              : "nav-link"
+                          }
+                          to="/option"
+                          onClick={this.handleActive}
+                        >
+                          <i className="bi bi-house"></i> Options
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+              {/* <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 <a href="../../index3.html" className="brand-link">
                   <img
                     src="/images/panier.png"
@@ -150,22 +250,6 @@ export default class Base extends Component {
                   </span>
                 </a>
                 <div className="sidebar">
-                  {/* <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div className="image">
-                  <img
-                    src="/images/panier_4.png"
-                    className="img-circle elevation-2"
-                    alt="Logo"
-                    height={30}
-                    width={40}
-                  />
-                </div>
-                <div className="info">
-                  <a href="#" className="d-block">
-                    Alexander Pierce
-                  </a>
-                </div>
-              </div> */}
                   <nav className="mt-2">
                     <ul
                       className="nav nav-pills nav-sidebar flex-column"
@@ -254,16 +338,19 @@ export default class Base extends Component {
                     </ul>
                   </nav>
                 </div>
-              </aside>
+              </aside> */}
               <div className="content-wrapper">
                 <Routes>
-                  <Route path="/home" element={<UserList />}></Route>
+                  <Route path="/" element={<Dashboard />}></Route>
+                  <Route path="/home" element={<Dashboard />}></Route>
                   <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
-                  <Route path="/article" element={<ListArticle />}></Route>
+                  <Route path="/article" element={<MenuJourTouMenu />}></Route>
                   <Route path="/option" element={<Option />}></Route>
-                  <Route path="/mjtm" element={<MenuJourTouMenu />}></Route>
-                  <Route path="/commande" element={<ListCommandeVente />}
+                  <Route path="/menu" element={<ListArticle />}></Route>
+                  <Route
+                    path="/commande"
+                    element={<ListCommandeVente />}
                   ></Route>
                 </Routes>
               </div>

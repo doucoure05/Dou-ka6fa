@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./dist/css/adminlte.css";
 import "./dist/css/all.min.css";
+// import "https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css";
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";

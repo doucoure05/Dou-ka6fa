@@ -18,6 +18,20 @@ export const getCommande = async (req, res) => {
   }
 };
 
+export const getVentes = async (req, res) => {
+  try {
+    const response = await Commande.findAll({
+      where: {
+        etat: 1,
+      },
+      order: [["dateVente", "DESC"]],
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const getCommandeById = async (req, res) => {
   try {
     const response = await Commande.findOne({

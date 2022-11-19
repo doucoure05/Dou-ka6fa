@@ -5,6 +5,10 @@ import * as clientService from "../../../services/ClientService";
 import Client from "../../../models/Client";
 import Commande from "../../../models/Commande";
 import OperationCommandeModal from "./OperationCommandeModal";
+
+import Toast from "react-bootstrap/Toast";
+import ToastContainer from "react-bootstrap/ToastContainer";
+
 export default class ListeCommande extends Component {
   constructor(props) {
     super(props);
@@ -86,78 +90,124 @@ export default class ListeCommande extends Component {
     this.getLIstClient();
   }
 
+  onClose(msg) {
+    if (msg !== "") {
+      this.toggleToastShow(msg);
+      this.getListCommande();
+    }
+    this.props.onClose();
+  }
+
+  toggleToastShow = (libelle) => {
+    this.setState(
+      {
+        toastShow: !this.state.toastShow,
+        toastLibelle: libelle,
+      },
+      () => {
+        // if (this.state.clos && this.state.toastShow === false) {
+        //   this.handleClose();
+        // }
+      }
+    );
+  };
+
   render() {
     return (
-      <section className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-sm-12">
-              {this.state.listCommande.length > 0 ? (
-                <h3 className="text-right display-4">
-                  {" "}
-                  {this.state.listCommande.length} Commande en cours
-                </h3>
-              ) : null}
+      <>
+        <section className="content">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-sm-12">
+                {this.state.listCommande.length > 0 ? (
+                  <h4 className="text-left">
+                    {" "}
+                    {this.state.listCommande.length} en cours
+                  </h4>
+                ) : null}
+              </div>
             </div>
-          </div>
-          <CommandeModal
-            libelle={"Nouvelle Commande"}
-            add={true}
-            commande={null}
-            btnStyle="btn btn-block btn-success"
-            btnIcon="bi-plus-circle"
-            onSave={this.onSave}
-            onClose={this.getListCommande.bind(this)}
-          />
+            <CommandeModal
+              libelle={"Nouvelle Commande"}
+              add={true}
+              commande={null}
+              btnStyle="btn btn-block btn-success"
+              btnIcon="bi-plus-circle"
+              onSave={this.onSave}
+              onClose={this.getListCommande.bind(this)}
+            />
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th width={100}>ID</th>
-                <th>Date</th>
-                <th>Client</th>
-                <th width={150}>Prix</th>
-                <th width={150}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.listCommande.map((commande, index) => (
-                <tr key={commande.id}>
-                  <td>{commande.id}</td>
-                  <td>
-                    {
-                      this.formatDate(commande.dateCommande)
-                      // commande.dateCommande
-                    }
-                  </td>
-                  <td>{this.getClientName(commande.clientId)}</td>
-                  <td>{commande.total}</td>
-                  <td>
-                    {
-                      // <CommandeModal
-                      //   libelle={"Editer"}
-                      //   add={true}
-                      //   commande={commande}
-                      //   btnStyle="button is-small is-info"
-                      //   onSave={this.onUpdate}
-                      //   onDelete={this.onDelete}
-                      //   btnIcon="bi bi-pencil"
-                      // />
-                      <OperationCommandeModal
-                        commande={commande}
-                        onClose={this.getListCommande.bind(this)}
-                      />
-                    }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {this.state.listCommande.length > 0 ? null : (
-            <h2 className="text-center display-4">Aucune Commande en cours</h2>
-          )}
-        </div>
-      </section>
+            {this.state.listCommande.length > 0 ? (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th width={100}>N°</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th width={150}>Prix</th>
+                    <th width={50}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.listCommande.map((commande, index) => (
+                    <tr key={commande.id}>
+                      <td>{commande.id}</td>
+                      <td>
+                        {
+                          this.formatDate(commande.dateCommande)
+                          // commande.dateCommande
+                        }
+                      </td>
+                      <td>{this.getClientName(commande.clientId)}</td>
+                      <td>{commande.total}</td>
+                      <td>
+                        {
+                          // <CommandeModal
+                          //   libelle={"Editer"}
+                          //   add={true}
+                          //   commande={commande}
+                          //   btnStyle="button is-small is-info"
+                          //   onSave={this.onUpdate}
+                          //   onDelete={this.onDelete}
+                          //   btnIcon="bi bi-pencil"
+                          // />
+                          <OperationCommandeModal
+                            commande={commande}
+                            onClose={this.onClose.bind(this)}
+                            add={true}
+                          />
+                        }
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <h2 className="text-center display-4">
+                Aucune Commande en cours
+              </h2>
+            )}
+          </div>
+        </section>
+        <ToastContainer className="p-3" position="top-end">
+          <Toast
+            show={this.state.toastShow}
+            onClose={this.toggleToastShow}
+            delay={3000}
+            autohide
+          >
+            <Toast.Header closeButton={false}>
+              <img
+                src="images/panier_2.png"
+                className="rounded me-2"
+                alt="boost"
+              />
+              <strong className="me-auto">DounKaFa</strong>
+            </Toast.Header>
+            <Toast.Body>{this.state.toastLibelle}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      </>
     );
   }
 }

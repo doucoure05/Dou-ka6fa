@@ -10,6 +10,7 @@ import ArticleModal from "./ArticleModal";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import Categorie from "../../models/Categorie.js";
+import MenuJour from "./MenuJour.js";
 
 export default class ListArticle extends Component {
   constructor(props) {
@@ -126,7 +127,7 @@ export default class ListArticle extends Component {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Liste des articles</h1>
+                <h1>MENUS</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -135,70 +136,92 @@ export default class ListArticle extends Component {
                       Acceuil
                     </Link>
                   </li>
-                  <li className="breadcrumb-item active">Liste des articles</li>
+                  <li className="breadcrumb-item active">Menu</li>
                 </ol>
               </div>
             </div>
           </div>
         </section>
+        <div className="dropdown-divider"></div>
         <section className="content">
           <div className="container-fluid">
-            {/* <Link to="/article/add" className="button is-success">
-            {
-              //Ajouter l'cone plus ici
-            }
-            Nouveau article
-          </Link> */}
-            <ArticleModal
-              libelle={"Nouvel Article"}
-              add={true}
-              article={null}
-              btnStyle="btn btn-block btn-success"
-              btnIcon="bi-plus-circle"
-              onSave={this.onSave}
-            />
-            <table className="table">
-              <thead>
-                <tr>
-                  <th width={50}>ID</th>
-                  <th>Nom</th>
-                  <th>Description</th>
-                  <th>Qte Journalière</th>
-                  <th>Prix</th>
-                  <th>Pt de Fidelité</th>
-                  <th>Catégorie</th>
-                  <th width={100}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.listArticle.map((article, index) => (
-                  <tr key={article.id}>
-                    <td>{article.id}</td>
-                    <td>{article.nom}</td>
-                    <td>{article.description}</td>
-                    <td>{article.qteJour}</td>
-                    <td>{article.prix}</td>
-                    <td>{article.point}</td>
-                    <td>{this.getCategorieName(article.categorieId)}</td>
+            <div className="row">
+              <div className="col-md-3">
+                <div className="card card-secondary card-outline">
+                  <div className="card-header">
+                    <h3 className="card-title">Menu du jour</h3>
+                  </div>
+                  <div className="card-body">
+                    <MenuJour />
+                  </div>
+                </div>
+              </div>
 
-                    <td>
-                      <ArticleModal
-                        libelle={"Editer"}
-                        add={true}
-                        article={article}
-                        btnStyle="button is-small is-info"
-                        onSave={this.onUpdate}
-                        onDelete={this.onDelete}
-                        btnIcon="bi bi-pencil"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {this.state.listArticle.length > 0 ? null : (
-              <h2 className="text-center display-4">Aucun élément trouvé</h2>
-            )}
+              <div className="col-md-9">
+                <div className="card card-secondary card-outline">
+                  <div className="card-header">
+                    <h3 className="card-title">Autres Menu</h3>
+                  </div>
+                  <div className="card-body">
+                    <ArticleModal
+                      libelle={"Nouvel Article"}
+                      add={true}
+                      article={null}
+                      btnStyle="btn btn-block btn-success"
+                      btnIcon="bi-plus-circle"
+                      onSave={this.onSave}
+                    />
+
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th width={50}>#</th>
+                          <th>Nom</th>
+                          <th>Description</th>
+                          <th>Qte Journalière</th>
+                          <th>Prix</th>
+                          <th>Pt de Fidelité</th>
+                          <th>Catégorie</th>
+                          <th width={100}>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.listArticle.map((article, index) => (
+                          <tr key={article.id}>
+                            <td>{index + 1}</td>
+                            <td>{article.nom}</td>
+                            <td>{article.description}</td>
+                            <td>{article.qteJour}</td>
+                            <td>{article.prix}</td>
+                            <td>{article.point}</td>
+                            <td>
+                              {this.getCategorieName(article.categorieId)}
+                            </td>
+
+                            <td>
+                              <ArticleModal
+                                libelle={"Editer"}
+                                add={true}
+                                article={article}
+                                btnStyle="button is-small is-info"
+                                onSave={this.onUpdate}
+                                onDelete={this.onDelete}
+                                btnIcon="bi bi-pencil"
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {this.state.listArticle.length > 0 ? null : (
+                      <h2 className="text-center display-4">
+                        Aucun élément trouvé
+                      </h2>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

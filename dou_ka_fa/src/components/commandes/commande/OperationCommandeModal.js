@@ -51,19 +51,7 @@ export default class OperationCommandeModal extends Component {
       );
     });
   };
-  toggleToastShow = (libelle) => {
-    this.setState(
-      {
-        toastShow: !this.state.toastShow,
-        toastLibelle: libelle,
-      },
-      () => {
-        if (this.state.clos && this.state.toastShow === false) {
-          this.handleClose();
-        }
-      }
-    );
-  };
+
   getClientName = (id) => {
     let clt =
       this.state.listClient.filter((c) => c.id === id).length > 0
@@ -204,11 +192,11 @@ export default class OperationCommandeModal extends Component {
       {
         //Vider tous les champs ici
         commande: null,
-        clos: false,
+
         show: false,
       },
       () => {
-        this.props.onClose();
+        this.props.onClose(this.state.toastLibelle);
       }
     );
   };
@@ -217,11 +205,15 @@ export default class OperationCommandeModal extends Component {
       show: true,
       commande: {
         ...this.props.commande,
-        prixTotalPaye: this.props.commande.total,
+        prixTotalPaye: this.props.add
+          ? this.props.commande.total
+          : this.props.commande.prixTotalPaye,
       },
       formLigneOK: false,
       currentLigne: null,
       ligneCommande: [],
+      toastShow: !this.state.toastShow,
+      toastLibelle: "",
     });
     this.getLIstLigneCommande();
     this.getSeuil();
@@ -240,10 +232,14 @@ export default class OperationCommandeModal extends Component {
         result.msg === "success"
           ? "Commande annulée avec succès."
           : "Une erreur est intervenu lors de l'annulation.";
-      this.toggleToastShow(msg);
-      this.setState({
-        clos: true,
-      });
+      // this.toggleToastShow(msg);
+      this.setState(
+        {
+          toastShow: !this.state.toastShow,
+          toastLibelle: msg,
+        },
+        this.handleClose()
+      );
     });
   };
   doSave = () => {
@@ -253,10 +249,14 @@ export default class OperationCommandeModal extends Component {
         result.msg === "success"
           ? "Vente enregistré avec succès."
           : "Une erreur est intervenu lors de l'annulation.";
-      this.toggleToastShow(msg);
-      this.setState({
-        clos: true,
-      });
+      // this.toggleToastShow(msg);
+      this.setState(
+        {
+          toastShow: !this.state.toastShow,
+          toastLibelle: msg,
+        },
+        this.handleClose()
+      );
     });
   };
 
@@ -298,12 +298,21 @@ export default class OperationCommandeModal extends Component {
   render() {
     return (
       <>
-        <Button
-          className="btn btn-block btn-success btn-sm"
-          onClick={this.handleShow}
-        >
-          <i className="bi bi-bag-check"></i> Opération
-        </Button>
+        {this.props.add ? (
+          <Button
+            className="btn btn-block btn-success btn-sm"
+            onClick={this.handleShow}
+          >
+            <i className="bi bi-bag-check"></i>
+          </Button>
+        ) : (
+          <Button
+            className="btn btn-block btn-success btn-sm"
+            onClick={this.handleShow}
+          >
+            <i className="bi bi-eye"> Voir détail</i>
+          </Button>
+        )}
         <Modal
           show={this.state.show}
           onHide={this.handleClose}
@@ -317,7 +326,8 @@ export default class OperationCommandeModal extends Component {
           size="xl"
         >
           <Modal.Header closeButton>
-            Opération Commande N°{this.props.commande.id}
+            {this.props.add ? "Opération " : null}Commande N°
+            {this.props.commande.id}
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -374,7 +384,8 @@ export default class OperationCommandeModal extends Component {
                     Number(this.getClientPoint(this.props.commande.clientId)) >=
                       (this.state.seuil != null ? this.state.seuil.montant : 0)
                   )} */}
-                  {this.props.commande.clientId != null &&
+                  {this.props.add &&
+                  this.props.commande.clientId != null &&
                   this.state.seuil != null &&
                   Number(this.getClientPoint(this.props.commande.clientId)) >=
                     (this.state.seuil != null ? this.state.seuil.point : 0) ? (
@@ -395,44 +406,57 @@ export default class OperationCommandeModal extends Component {
               </div>
               <div className="dropdown-divider"></div>
               <div className="row">
-                <div className="col-sm-12">
-                  <p
-                    className="text-center"
-                    style={{ fontSize: "20px", fontWeight: "bold" }}
-                  >
-                    Total à payer
-                  </p>
-                  <p
-                    className="text-center"
-                    style={{ fontSize: "20px", fontWeight: "bold" }}
-                  >
-                    {this.state.commande != null
-                      ? this.state.commande.prixTotalPaye
-                      : null}
-                  </p>
-                </div>
+                {this.props.add ? (
+                  <div className="col-sm-12">
+                    <p
+                      className="text-center"
+                      style={{ fontSize: "20px", fontWeight: "bold" }}
+                    >
+                      Total à payer
+                    </p>
+                    <p
+                      className="text-center"
+                      style={{ fontSize: "20px", fontWeight: "bold" }}
+                    >
+                      {this.state.commande != null
+                        ? this.state.commande.prixTotalPaye
+                        : null}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="col-sm-12">
+                    <p
+                      className="text-center"
+                      style={{ fontSize: "20px", fontWeight: "bold" }}
+                    >
+                      Total payer
+                    </p>
+                    <p
+                      className="text-center"
+                      style={{ fontSize: "20px", fontWeight: "bold" }}
+                    >
+                      {this.state.commande != null
+                        ? this.state.commande.prixTotalPaye
+                        : null}
+                    </p>
+                  </div>
+                )}
               </div>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button
-              disabled={this.state.clos}
-              variant="primary"
-              onClick={this.doSave}
-            >
-              Enregistrer la Vente
-            </Button>
-            <Button
-              disabled={this.state.clos}
-              variant="danger"
-              onClick={this.annulerCommande}
-            >
-              Annuler la commande
-            </Button>
-          </Modal.Footer>
+          {this.props.add ? (
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.doSave}>
+                Enregistrer la Vente
+              </Button>
+              <Button variant="danger" onClick={this.annulerCommande}>
+                Annuler la commande
+              </Button>
+            </Modal.Footer>
+          ) : null}
         </Modal>
 
-        <ToastContainer className="p-3" position="top-end">
+        {/* <ToastContainer className="p-3" position="top-end">
           <Toast
             show={this.state.toastShow}
             onClose={this.toggleToastShow}
@@ -449,7 +473,7 @@ export default class OperationCommandeModal extends Component {
             </Toast.Header>
             <Toast.Body>{this.state.toastLibelle}</Toast.Body>
           </Toast>
-        </ToastContainer>
+        </ToastContainer> */}
       </>
     );
   }

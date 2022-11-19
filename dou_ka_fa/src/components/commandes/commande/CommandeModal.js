@@ -12,15 +12,10 @@ import Categorie from "../../../models/Categorie";
 // import LigneCommande from "../../../models/LigneCommande";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
-import Overlay from "react-bootstrap/Overlay";
-import { Popover } from "bootstrap";
-import { Tooltip } from "bootstrap";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-
+import * as menuJourservice from "../../../services/PromotionService.js";
 export default class CommandeModal extends Component {
   constructor(props) {
     super(props);
-    this.ref = React.createRef();
     this.state = {
       show: false,
       commande: null,
@@ -34,9 +29,22 @@ export default class CommandeModal extends Component {
 
       toastShow: false,
       toastLibelle: "",
-      showOverlay: false,
-      target: null,
+      isMenuJourAdd: false,
+      menuJour: null,
+      ligneMenuJour: [],
+
+      globalLigneCommande: [],
+      menuAddLigne: [],
     };
+  }
+
+  getMenuJour() {
+    menuJourservice.getTodayMenu().then((result) => {
+      this.setState({
+        menuJour: result.menuJour,
+        ligneMenuJour: result.lignes,
+      });
+    });
   }
 
   toggleToastShow = (libelle) => {
@@ -54,7 +62,7 @@ export default class CommandeModal extends Component {
         success = true;
       }
       if (success) {
-        this.state.ligneCommande.forEach((ligne) => {
+        this.state.globalLigneCommande.forEach((ligne) => {
           ligne.commandeId = article.id;
           service.createLigneCommande(ligne).then((response) => {});
         });
@@ -167,6 +175,12 @@ export default class CommandeModal extends Component {
           (article) => article.id === Number(ligne.articleId)
         )[0].prix;
     });
+    if (this.state.isMenuJourAdd) {
+      somme +=
+        Number(this.state.commande.qtePromotion) *
+        Number(this.state.menuJour.prixPromotion);
+    }
+
     this.setState({
       commande: {
         ...this.state.commande,
@@ -176,18 +190,23 @@ export default class CommandeModal extends Component {
   }
 
   addToLigne = (event) => {
+    // console.log(this.state.currentLigne.articleId);
     // On verifie si l'article  n'est pas dans la liste
     let list = [...this.state.ligneCommande];
     let trouve = false;
     list.forEach((ligne) => {
-      if (ligne.articleId === this.state.currentLigne.articleId) {
+      if (
+        Number(ligne.articleId) === Number(this.state.currentLigne.articleId)
+      ) {
         trouve = true;
       }
     });
     if (trouve) {
       list.map((ligne) => {
-        if (ligne.articleId === this.state.currentLigne.articleId) {
-          ligne.qte = this.state.currentLigne.qte;
+        if (
+          Number(ligne.articleId) === Number(this.state.currentLigne.articleId)
+        ) {
+          ligne.qte = Number(this.state.currentLigne.qte);
         }
         return ligne;
       });
@@ -201,12 +220,12 @@ export default class CommandeModal extends Component {
       },
       () => {
         this.checkLigneForm();
-        this.calculTotal();
+        this.mergeLigneListes();
+        // this.calculTotal();
       }
     );
   };
   deleteLigne = (id) => {
-    console.log(id);
     let list = [...this.state.ligneCommande].filter(
       (ligne) => ligne.articleId !== id
     );
@@ -216,7 +235,7 @@ export default class CommandeModal extends Component {
       },
       () => {
         this.checkLigneForm();
-        this.calculTotal();
+        this.mergeLigneListes();
       }
     );
   };
@@ -233,14 +252,22 @@ export default class CommandeModal extends Component {
     );
   };
   handleShow = () => {
-    this.setState({
-      show: true,
-      commande: this.props.article,
-      formOK: this.props.article != null,
-      formLigneOK: false,
-      currentLigne: null,
-      ligneCommande: [],
-    });
+    this.setState(
+      {
+        show: true,
+        commande: this.props.article,
+        formOK: this.props.article != null,
+        formLigneOK: false,
+        currentLigne: null,
+        ligneCommande: [],
+        isMenuJourAdd: false,
+        menuJour: null,
+        ligneMenuJour: [],
+        globalLigneCommande: [],
+        menuAddLigne: [],
+      },
+      this.getMenuJour()
+    );
     // this.getLIstClient();
   };
 
@@ -258,6 +285,137 @@ export default class CommandeModal extends Component {
         },
       },
       () => {
+        this.checkForm();
+      }
+    );
+  }
+
+  wantToAddMenuJour = (event) => {
+    this.setState(
+      {
+        isMenuJourAdd: !this.state.isMenuJourAdd,
+      },
+      () => {
+        if (this.state.isMenuJourAdd) {
+          this.setState(
+            {
+              commande: {
+                ...this.state.commande,
+                promotionId: this.state.menuJour.id,
+                qtePromotion: 1,
+              },
+            },
+            () => {
+              let list = [];
+              this.state.ligneMenuJour.forEach((menuLigne) => {
+                list.push({
+                  qte: menuLigne.qte * this.state.commande.qtePromotion,
+                  articleId: menuLigne.articleId,
+                });
+              });
+              this.setState(
+                {
+                  menuAddLigne: [...list],
+                },
+                () => {
+                  this.mergeLigneListes();
+
+                  // this.calculTotal();
+                }
+              );
+            }
+          );
+        } else {
+          this.setState(
+            {
+              commande: {
+                ...this.state.commande,
+                promotionId: null,
+                qtePromotion: null,
+              },
+            },
+            () => {
+              this.mergeLigneListes();
+            }
+          );
+        }
+      }
+    );
+  };
+
+  handleChangeMenuQte(event) {
+    event.preventDefault();
+    let fleldVal = event.target.value;
+    this.setState(
+      {
+        commande: {
+          ...this.state.commande,
+          qtePromotion: fleldVal,
+        },
+      },
+      () => {
+        // this.checkForm();
+        let list = [];
+        this.state.ligneMenuJour.forEach((menuLigne) => {
+          list.push({
+            articleId: Number(menuLigne.articleId),
+            qte:
+              Number(menuLigne.qte) * Number(this.state.commande.qtePromotion),
+          });
+        });
+        this.setState(
+          {
+            menuAddLigne: [...list],
+          },
+          () => {
+            this.mergeLigneListes();
+            // this.calculTotal();
+          }
+        );
+      }
+    );
+  }
+
+  mergeLigneListes() {
+    let finalList = [];
+    let list = [];
+    [...this.state.ligneCommande].forEach((el) => {
+      list.push(el);
+    });
+    [...list].forEach((element) => {
+      finalList.push({ ...element });
+    });
+    let listMenuAddLigne = [...this.state.menuAddLigne];
+
+    if (this.state.isMenuJourAdd) {
+      listMenuAddLigne.forEach((ligne) => {
+        let trouve = false;
+        list.forEach((li) => {
+          if (Number(ligne.articleId) === Number(li.articleId)) {
+            trouve = true;
+          }
+        });
+        if (trouve) {
+          //On a le même article dans les deux liste
+          finalList = finalList.map((finalLigne) => {
+            if (Number(finalLigne.articleId) === Number(ligne.articleId)) {
+              finalLigne.qte = Number(finalLigne.qte) + Number(ligne.qte);
+            }
+            return finalLigne;
+          });
+        } else {
+          //L'article set dans la listeCommande
+          finalList.push(ligne);
+        }
+      });
+    }
+    // console.log(list);
+    this.setState(
+      {
+        globalLigneCommande: [...finalList],
+      },
+      () => {
+        this.calculTotal();
         this.checkForm();
       }
     );
@@ -287,8 +445,8 @@ export default class CommandeModal extends Component {
       //     isclient = true;
       //   }
       // }
-      if (this.state.ligneCommande != null) {
-        if (this.state.ligneCommande.length > 0) {
+      if (this.state.globalLigneCommande != null) {
+        if (this.state.globalLigneCommande.length > 0) {
           isligne = true;
         }
       }
@@ -330,17 +488,15 @@ export default class CommandeModal extends Component {
     this.getLIstArticle();
     this.getLIstClient();
   }
-  handleOverlay = (event) => {
-    this.setState({
-      showOverlay: !this.state.showOverlay,
-      // target: event.target,
-    });
-  };
 
   render() {
     return (
       <>
-        <Button className={this.props.btnStyle} onClick={this.handleShow}>
+        <Button
+          disabled={this.state.show}
+          className={this.props.btnStyle}
+          onClick={this.handleShow}
+        >
           <i className={this.props.btnIcon}></i> {this.props.libelle}
         </Button>
 
@@ -418,38 +574,75 @@ export default class CommandeModal extends Component {
                 </div>
               </div>
             </Form>
-            <div>
-              <div className="dropdown-divider"></div>
-              <h1 style={{ textAlign: "center" }}>Menu du jour</h1>
-              <Form>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <div>
-                      <Button
-                        ref={this.ref}
-                        onClick={() => this.handleOverlay()}
-                      >
-                        Click me!
-                      </Button>
-                      <Overlay
-                        target={this.ref.current}
-                        show={this.state.showOverlay}
-                        placement="right"
-                      >
-                        {(props) =>
-                          "Teste"
-                          // <Tooltip id="overlay-example" {...props}>
-                          //   My Tooltip
-                          // </Tooltip>
-                        }
-                      </Overlay>
+            {this.state.menuJour != null ? (
+              <div>
+                <div className="dropdown-divider"></div>
+                <Form>
+                  {!this.state.isMenuJourAdd ? (
+                    <div className="row">
+                      <div className="text-center">
+                        <Button
+                          className="btn btn-secondary btn-sm"
+                          onClick={this.wantToAddMenuJour}
+                        >
+                          <i className="bi bi-cart"></i> Ajouter le menu du jour
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-sm-4"></div>
-                  <div className="col-sm-4"></div>
-                </div>
-              </Form>
-            </div>
+                  ) : (
+                    <div className="row">
+                      <h1 style={{ textAlign: "center" }}>Menu du jour</h1>
+                      <div className="col-md-6">
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                          <Form.Label style={{ fontSize: "15px" }}>
+                            Qte menu du jour
+                          </Form.Label>
+                          <Form.Control
+                            size="sm"
+                            type="number"
+                            placeholder="Quantité"
+                            min={1}
+                            value={
+                              this.state.commande != null &&
+                              this.state.commande.qtePromotion != null
+                                ? this.state.commande.qtePromotion
+                                : ""
+                            }
+                            name="qtePromotion"
+                            onChange={this.handleChangeMenuQte.bind(this)}
+                          />
+                        </Form.Group>
+                      </div>
+                      <div className="col-md-3">
+                        <Button
+                          className="btn btn-block btn-danger btn-sm"
+                          style={{
+                            position: "relative",
+                            top: "1.95rem",
+                          }}
+                          onClick={this.wantToAddMenuJour}
+                        >
+                          <i className="bi-x"></i> Annuler
+                        </Button>
+                      </div>
+                      <div className="col-md-3">
+                        <Button
+                          className="btn btn-block btn-secondary btn-sm"
+                          style={{
+                            position: "relative",
+                            top: "1.95rem",
+                          }}
+                          onClick={this.addToLigne}
+                        >
+                          <i className="bi-ticket-detailed"></i> Voir détail
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Form>
+              </div>
+            ) : null}
+
             <div className="dropdown-divider"></div>
             <h1 style={{ textAlign: "center" }}>Ajouter Un artile</h1>
             <Form>
@@ -505,6 +698,10 @@ export default class CommandeModal extends Component {
                   <Button
                     disabled={!this.state.formLigneOK}
                     className="btn btn-block btn-success btn-sm"
+                    style={{
+                      position: "relative",
+                      top: "1.95rem",
+                    }}
                     onClick={this.addToLigne}
                   >
                     <i className="bi-plus-circle"></i>
@@ -523,7 +720,7 @@ export default class CommandeModal extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.ligneCommande.map((ligne, index) => (
+                {this.state.globalLigneCommande.map((ligne, index) => (
                   <tr key={ligne.articleId}>
                     <td>{this.getArticleName(ligne.articleId)}</td>
                     <td>{ligne.qte}</td>

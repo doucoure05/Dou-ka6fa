@@ -6,6 +6,12 @@ export const getCommandes = async () => {
   return response.data;
 };
 
+export const getVentes = async () => {
+  const response = await axios.get("http://localhost:5000/ventes");
+
+  return response.data;
+};
+
 //Methode que je pourrais utiliser si j'utilisa le format DATEONLY dans le model controller du server
 function formatDate(date) {
   var d = new Date(date),
@@ -97,7 +103,7 @@ export const updateCommandeToVente = async (commande) => {
         prixTotalPaye: commande.prixTotalPaye,
         prixPoint: commande.prixPoint,
         pointUtilise: commande.pointUtilise,
-        etat: 0,
+        etat: 1,
         clientId: commande.clientId,
         // dateCommande: formatDate(Date.now()),
         // qteJour: article.qteJour,
