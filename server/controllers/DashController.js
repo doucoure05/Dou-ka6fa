@@ -6,12 +6,11 @@ import Article from "../models/Article.js";
 
 export const getClientFidele = async (req, res) => {
   try {
-    //   const response = await Commande.findAll({
-    //     where: {
-    //       etat: 0,
-    //     },
-    //   });
-    //   res.status(200).json(response);
+    const response = await Client.findAll({
+      order: [["point", "DESC"]],
+      limit: 10,
+    });
+    res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
   }

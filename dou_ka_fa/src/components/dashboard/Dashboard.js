@@ -112,7 +112,14 @@ export default class Dashboard extends Component {
     });
   }
 
-  getClientFidele() {}
+  getClientFidele() {
+    dashService.getClientFidele().then((clients) => {
+      //   console.log(clients);
+      this.setState({
+        clientsFidele: clients,
+      });
+    });
+  }
 
   getMenuPlusVendu() {}
 
@@ -228,7 +235,17 @@ export default class Dashboard extends Component {
                             <th>Point de fidelité</th>
                           </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                          {this.state.clientsFidele.map((client, index) => (
+                            <tr key={client.id}>
+                              <td>{client.id}</td>
+                              <td>{client.nom}</td>
+                              <td>{client.prenom}</td>
+                              <td>{client.telephone}</td>
+                              <td>{client.point}</td>
+                            </tr>
+                          ))}
+                        </tbody>
                       </table>
                     </div>
                   </div>
