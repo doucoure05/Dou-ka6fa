@@ -147,7 +147,7 @@ export default class ListArticle extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-3">
-                <div className="card card-secondary card-outline">
+                <div className="card card-success card-outline">
                   <div className="card-header">
                     <h3 className="card-title">Menu du jour</h3>
                   </div>
@@ -158,9 +158,9 @@ export default class ListArticle extends Component {
               </div>
 
               <div className="col-md-9">
-                <div className="card card-secondary card-outline">
+                <div className="card card-success card-outline">
                   <div className="card-header">
-                    <h3 className="card-title">Autres Menu</h3>
+                    <h3 className="card-title">Articles</h3>
                   </div>
                   <div className="card-body">
                     <ArticleModal

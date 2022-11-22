@@ -120,7 +120,7 @@ export default class ListVente extends Component {
       <>
         <div className="row">
           <div className="col-md-12">
-            <div className="card card-secondary card-outline">
+            <div className="card card-success card-outline">
               <div className="card-header">
                 <h3 className="card-title">Commande en cours</h3>
               </div>
@@ -132,7 +132,7 @@ export default class ListVente extends Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="card card-secondary card-outline">
+            <div className="card card-success card-outline">
               <div className="card-header">
                 <h3 className="card-title">Liste des ventes</h3>
               </div>
