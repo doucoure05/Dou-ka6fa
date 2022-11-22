@@ -15,7 +15,7 @@ export default class Dashboard extends Component {
       listArticle: [],
       listCategorie: [],
       clientsFidele: [],
-      produitVendus: [],
+      menuPlusVendus: [],
       venteJ: 0,
       venteM: 0,
       menuVenduJ: 0,
@@ -112,6 +112,14 @@ export default class Dashboard extends Component {
     });
   }
 
+  getArticleById = (id) => {
+    let art =
+      this.state.listArticle.filter((a) => a.id === Number(id)).length > 0
+        ? this.state.listArticle.filter((a) => a.id === Number(id))[0]
+        : null;
+    return art;
+  };
+
   getClientFidele() {
     dashService.getClientFidele().then((clients) => {
       //   console.log(clients);
@@ -121,11 +129,40 @@ export default class Dashboard extends Component {
     });
   }
 
-  getMenuPlusVendu() {}
+  getMenuPlusVendu() {
+    dashService.getMenuPlusVendu().then((myList) => {
+      myList = myList.map((list) => {
+        list.article = this.getArticleById(list.articleId);
+        return list;
+      });
+      this.setState({
+        menuPlusVendus: myList,
+      });
+    });
+  }
 
-  getVentePeriod() {}
+  getVentePeriod() {
+    dashService.getVentePeriod().then((list) => {
+      this.setState({
+        venteJ: list.j,
+        venteM: list.m,
+      });
+    });
+  }
 
-  getMenuVenduPeriod() {}
+  getMenuVenduPeriod() {
+    dashService.getMenuVenduPeriodJ().then((result) => {
+      this.setState({
+        menuVenduJ: result.j,
+      });
+    });
+
+    dashService.getMenuVenduPeriodM().then((result) => {
+      this.setState({
+        menuVenduM: result.m,
+      });
+    });
+  }
 
   componentDidMount() {
     this.getLIstClient();
@@ -156,7 +193,7 @@ export default class Dashboard extends Component {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-3 col-6">
-                  <div className="small-box bg-info">
+                  <div className="small-box bg-success">
                     <div className="inner">
                       <h2 className="text-center" style={{ color: "white" }}>
                         Total Client
@@ -166,12 +203,16 @@ export default class Dashboard extends Component {
                       </h3>
                     </div>
                     <div className="icon ">
-                      <i className="bi bi-eye"></i>
+                      {/* <span className="fas fa-user"></span> */}
+                      <i
+                        style={{ color: "white" }}
+                        className="bi bi-shop-window"
+                      ></i>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-3 col-6">
-                  <div className="small-box bg-info">
+                  <div className="small-box bg-success">
                     <div className="inner">
                       <h2 className="text-center" style={{ color: "white" }}>
                         Total Menu
@@ -181,12 +222,15 @@ export default class Dashboard extends Component {
                       </h3>
                     </div>
                     <div className="icon">
-                      <i className="bi bi-eye"></i>
+                      <i
+                        style={{ color: "white" }}
+                        className="bi bi-journal"
+                      ></i>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-3 col-6">
-                  <div className="small-box bg-info">
+                  <div className="small-box bg-success">
                     <div className="inner">
                       <h2 className="text-center" style={{ color: "white" }}>
                         Vente(J/M)
@@ -196,12 +240,12 @@ export default class Dashboard extends Component {
                       </h3>
                     </div>
                     <div className="icon">
-                      <i className="bi bi-eye"></i>
+                      <i style={{ color: "white" }} className="bi bi-coin"></i>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-3 col-6">
-                  <div className="small-box bg-info">
+                  <div className="small-box bg-success">
                     <div className="inner">
                       <h2 className="text-center" style={{ color: "white" }}>
                         Menu Vendu(J/M)
@@ -211,42 +255,52 @@ export default class Dashboard extends Component {
                       </h3>
                     </div>
                     <div className="icon">
-                      <i className="bi bi-eye"></i>
+                      <i style={{ color: "white" }} className="bi bi-shop"></i>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="dropdown-divider"></div>
               <div className="row">
                 <div className="col-md-6">
                   <div className="card">
                     <div className="card-header">
                       <h3 className="card-title">
-                        Clients les + <strong>fidèle</strong>
+                        Clients les <strong>+ fidèle</strong>
                       </h3>
                     </div>
                     <div className="card-body p-0">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th style={{ width: "10px" }}>#</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Téléphone</th>
-                            <th>Point de fidelité</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.clientsFidele.map((client, index) => (
-                            <tr key={client.id}>
-                              <td>{client.id}</td>
-                              <td>{client.nom}</td>
-                              <td>{client.prenom}</td>
-                              <td>{client.telephone}</td>
-                              <td>{client.point}</td>
+                      {this.state.clientsFidele.length > 0 ? (
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th style={{ width: "10px" }}>#</th>
+                              <th>Nom</th>
+                              <th>Prénom</th>
+                              <th>Téléphone</th>
+                              <th>Point de fidelité</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {this.state.clientsFidele.map((client, index) => (
+                              <tr key={client.id}>
+                                <td>{index + 1}</td>
+                                <td>{client.nom}</td>
+                                <td>{client.prenom}</td>
+                                <td>{client.telephone}</td>
+                                <td>{client.point}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <h2
+                          style={{ marginTop: "10px" }}
+                          className="text-center"
+                        >
+                          Liste vide
+                        </h2>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -254,23 +308,61 @@ export default class Dashboard extends Component {
                   <div className="card">
                     <div className="card-header">
                       <h3 className="card-title">
-                        Menus les + <strong>vendu</strong>
+                        Menus les <strong>+ vendu</strong>
                       </h3>
                     </div>
                     <div className="card-body p-0">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th style={{ width: "10px" }}>#</th>
-                            <th>Nom</th>
-                            <th>Prix</th>
-                            <th>Catégorie</th>
-                            <th>Point de fidelité</th>
-                            <th>Qte Vendu</th>
-                          </tr>
-                        </thead>
-                        <tbody></tbody>
-                      </table>
+                      {this.state.menuPlusVendus.lenght > 0 ? (
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th style={{ width: "10px" }}>#</th>
+                              <th>Nom</th>
+                              <th>Prix</th>
+                              <th>Catégorie</th>
+                              <th>Point de fidelité</th>
+                              <th>Qte Vendu</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.menuPlusVendus.map((list, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>
+                                  {list.article != null
+                                    ? list.article.nom
+                                    : null}
+                                </td>
+                                <td>
+                                  {list.article != null
+                                    ? list.article.prix
+                                    : null}
+                                </td>
+                                <td>
+                                  {list.article != null
+                                    ? this.getCategorieName(
+                                        list.article.categorieId
+                                      )
+                                    : null}
+                                </td>
+                                <td>
+                                  {list.article != null
+                                    ? list.article.point
+                                    : null}
+                                </td>
+                                <td>{list.qte}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <h2
+                          style={{ marginTop: "10px" }}
+                          className="text-center"
+                        >
+                          Liste vide
+                        </h2>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -142,7 +142,7 @@ export default class SeuilModal extends Component {
             <Modal.Footer>
               <Button
                 disabled={!this.state.formOK}
-                variant="primary"
+                variant="success"
                 onClick={this.doSave}
               >
                 Ajouter

@@ -234,7 +234,7 @@ export default class ListArticle extends Component {
           >
             <Toast.Header closeButton={false}>
               <img
-                src="images/panier_2.png"
+                src="images/online-store_32.png"
                 className="rounded me-2"
                 alt="boost"
               />
