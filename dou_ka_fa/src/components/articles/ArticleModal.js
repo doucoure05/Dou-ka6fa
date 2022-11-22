@@ -163,7 +163,7 @@ export default class ArticleModal extends Component {
         >
           <Modal.Header closeButton>
             {this.props.article === null ? (
-              <Modal.Title>Nouveau Article</Modal.Title>
+              <Modal.Title>Nouvel Article</Modal.Title>
             ) : (
               <Modal.Title>Modification Article</Modal.Title>
             )}
