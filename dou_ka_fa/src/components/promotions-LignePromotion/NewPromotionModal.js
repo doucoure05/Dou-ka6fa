@@ -432,6 +432,7 @@ export default class NewPromotionModal extends Component {
                       disabled={!this.state.formLigneOK}
                       className="btn btn-block"
                       onClick={this.addToLigne}
+                      variant="success"
                     >
                       Ajouter
                     </Button>
@@ -479,7 +480,7 @@ export default class NewPromotionModal extends Component {
           <Modal.Footer>
             <Button
               disabled={!this.state.formOK}
-              variant="primary"
+              variant="success"
               onClick={
                 this.props.menuJour === null ? this.doSave : this.doUpdate
               }
@@ -489,7 +490,7 @@ export default class NewPromotionModal extends Component {
             {this.props.menuJour != null ? (
               <Button
                 disabled={!this.state.formOK}
-                variant="primary"
+                variant="danger"
                 onClick={this.doDelete}
               >
                 Supprimer

@@ -142,7 +142,7 @@ export default class Base extends Component {
                 <div className="container">
                   <div className="navbar-brand">
                     <img
-                      src="/images/panier.png"
+                      src="/images/online-store_256.png"
                       alt="AdminLTE Logo"
                       className="brand-image img-circle elevation-3"
                       style={{ opacity: ".8", marginTop: "5px" }}
