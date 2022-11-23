@@ -6,6 +6,19 @@ export const getLignePromotion = async () => {
     return response.data;
 };
 
+export const getLigneByPromotion = async (id) => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/LignePromotionByPromotion/${id}`
+        );
+
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
 export const deleteLignePromotion = async (id) => {
     try {
         const response = await axios.delete(`http://localhost:5000/LignePromotion/${id}`);

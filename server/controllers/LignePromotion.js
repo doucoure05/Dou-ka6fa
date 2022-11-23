@@ -9,6 +9,19 @@ export const getLignePromotion = async (req, res) => {
     }
 };
 
+export const getLigneByPromotion = async (req, res) => {
+    try {
+        const response = await LignePromotion.findAll({
+            where: {
+                promotionId: req.params.id,
+            },
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 export const getLignePromotionById = async (req, res) => {
     try {
         const response = await LignePromotion.findOne({

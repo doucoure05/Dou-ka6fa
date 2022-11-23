@@ -19,6 +19,7 @@ import ListCommandeVente from "./commandes/ListCommandeVente";
 import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
 import Article from "../models/Article";
+import ListeMenuJour from "./option/detailsMenuJour/ListeMenuJour";
 
 export default class Base extends Component {
   constructor(props) {
@@ -350,6 +351,7 @@ export default class Base extends Component {
                   {/* <Route path="/article" element={<MenuJourTouMenu />}></Route> */}
                   <Route path="/option" element={<Option />}></Route>
                   <Route path="/menu" element={<ListArticle />}></Route>
+                  <Route path="/listeMenuJour" element={<ListeMenuJour/>}></Route>
                   <Route
                     path="/commande"
                     element={<ListCommandeVente />}

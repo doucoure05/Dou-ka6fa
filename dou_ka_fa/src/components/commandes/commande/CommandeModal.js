@@ -13,6 +13,7 @@ import Categorie from "../../../models/Categorie";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import * as menuJourservice from "../../../services/PromotionService.js";
+import LignePromotionModal from "../../promotions-LignePromotion/promotion/LignePromotionModal"
 export default class CommandeModal extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +66,7 @@ export default class CommandeModal extends Component {
       if (success) {
         this.state.globalLigneCommande.forEach((ligne) => {
           ligne.commandeId = article.id;
-          service.createLigneCommande(ligne).then((response) => {});
+          service.createLigneCommande(ligne).then((response) => { });
         });
       }
       if (success) {
@@ -96,7 +97,7 @@ export default class CommandeModal extends Component {
         {
           listClient: list,
         },
-        () => {}
+        () => { }
       );
     });
   }
@@ -605,7 +606,7 @@ export default class CommandeModal extends Component {
                             min={1}
                             value={
                               this.state.commande != null &&
-                              this.state.commande.qtePromotion != null
+                                this.state.commande.qtePromotion != null
                                 ? this.state.commande.qtePromotion
                                 : ""
                             }
@@ -627,16 +628,19 @@ export default class CommandeModal extends Component {
                         </Button>
                       </div>
                       <div className="col-md-3">
-                        <Button
-                          className="btn btn-block btn-secondary btn-sm"
+                        <LignePromotionModal
+                          // title
+                          libelle={"Voir étails"}
+                          add={true}
+                          LPpromo={this.state.menuJour}
+                          idpro={this.state.menuJour.id}
+                          btnStyle="btn btn-block btn-secondary btn-sm"
+                          btnIcon="bi bi-eye"
                           style={{
                             position: "relative",
-                            top: "1.95rem",
+                            top: "3rem",
                           }}
-                          onClick={this.addToLigne}
-                        >
-                          <i className="bi-ticket-detailed"></i> Voir détail
-                        </Button>
+                        />
                       </div>
                     </div>
                   )}

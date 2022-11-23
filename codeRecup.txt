@@ -1,60 +1,111 @@
-import express from "express";
-import mysql from 'mysql';
-import cors from 'cors';
-import UserRoute from './routes/UserRoute.js'
-
-const app = express();
-
-const db = mysql.createConnection({
-    host: "localhost",
-    root: "root",
-    password: "",
-    database: "doukafa_db"
-})
-
-app.use(express.json());
-app.use(cors());
-
-app.get("/users", (request, response)=>{
-    const query = "select * from user";
-    db.query(query, (err, data)=>{
-        if(err){
-            return response.json(err);
-        }else{
-            return response.json(data);
+constructor(props) {
+        super(props);
+        this.state = {
+            menuJour: null,
+            ligneMenuJour: [],
+            listArticle: [],
+            listCategorie: [],
+            show: false,
         }
-    })
-})
+    }
 
-app.listen(5000, ()=>{
-    console.log("Connection to backsend.")
-})
+    handleClose = () => {
+        this.setState({
+            //Vider tous les champs ici
+            // promo: null,
+            show: false,
+            // formOK: false,
+        });
+    };
 
-         <div>ToutMenu</div>;
-                <div className="col-md-3">
-                    <div className="card card-success">
-                        <div className="card-header">
-                            <h3 className="card-title">All together</h3>
+    handleShow = () => {
+        this.setState({
+            show: true,
+            // promo: this.props.promo,
+            // formOK: this.props.promo != null,
+        });
+    };
+    componentDidMount() {
+        // this.getLIstClient();
+        // this.getLIstLigneCommande();
+        this.getLIstCategorie();
+        this.getLIstArticle();
+        this.getMenuJour();
+    }
 
-                            <div className="card-tools">
-                                <button type="button" className="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false">
-                                    <i className="fas fa-sync-alt"></i>
-                                </button>
-                                <button type="button" className="btn btn-tool" data-card-widget="maximize">
-                                    <i className="fas fa-expand"></i>
-                                </button>
-                                <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                                    <i className="fas fa-minus"></i>
-                                </button>
-                                <button type="button" className="btn btn-tool" data-card-widget="remove">
-                                    <i className="fas fa-times"></i>
-                                </button>
-                            </div>
-                            {/* <!-- /.card-tools --> */}
-                        </div>
-                        {/* <!-- /.card-header --> */}
-                        <div className="card-body"><span className="text-danger"></span></div>
-                        {/* <!-- /.card-body --> */}
-                    </div>
-                    {/* <!-- /.card --> */}
-                </div>
+    getMenuJour() {
+        menuJourservice.getTodayMenu().then((result) => {
+            this.setState({
+                menuJour: result.menuJour,
+                ligneMenuJour: result.lignes,
+            });
+        });
+    }
+
+    getCategorieName = (id) => {
+        let cat =
+            this.state.listCategorie.filter((c) => c.id === id).length > 0
+                ? this.state.listCategorie.filter((c) => c.id === id)[0]
+                : null;
+        if (cat != null) {
+            return cat.nom;
+        } else return "";
+        // return cat.nom;
+    };
+
+
+    getLIstCategorie() {
+        categorieService.getCategorie().then((categories) => {
+            let list = [];
+            categories.forEach((categorie) => {
+                let cl = new Categorie(categorie.id, categorie.nom);
+                list.push(cl);
+            });
+            this.setState(
+                {
+                    listCategorie: list,
+                },
+                () => {
+                    //   console.log(this.state.listCategorie);
+                }
+            );
+        });
+    }
+
+
+    getArticleName = (id) => {
+        let art =
+            this.state.listArticle.filter((a) => a.id === Number(id)).length > 0
+                ? this.state.listArticle.filter((a) => a.id === Number(id))[0]
+                : null;
+        if (art != null) {
+            return art.nom + "(" + this.getCategorieName(art.categorieId) + ")";
+        } else return "";
+    };
+
+    getLIstArticle() {
+        articleService.getArticle().then((articles) => {
+            let list = [];
+            articles.forEach((article) => {
+                let ar = new Article(
+                    article.id,
+                    article.nom,
+                    article.description,
+                    article.qteJour,
+                    article.prix,
+                    article.photo,
+                    article.point,
+                    article.categorieId
+                );
+                list.push(ar);
+            });
+            this.setState(
+                {
+                    listArticle: list,
+                },
+                () => {
+                    //   console.log(this.state.listArticle);
+                }
+            );
+        });
+    }

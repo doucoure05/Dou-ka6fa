@@ -130,23 +130,7 @@ export default class ListePromotion extends Component {
     this.setState({
       listePromotion: list,
     });
-    // try {
-    // let list = this.state.listePromotion.filter((c) => c.id !== id);
-    // // console.log("List of l: ", list);
-    // this.state.listePromotion.length = 0;
-    // // console.log("List of listeLignePromotion: ", this.state.listeLignePromotion);
-    // this.setState({
-    //     listePromotion: list
-    // })
-    //     // console.log("List of listeLignePromotion: ", this.state.listeLignePromotion);
-    //     const response2 = axios.delete(`http://localhost:5000/promotion/${id}`);
-    //     // const response1 = axios.delete(`http://localhost:5000/deleteLignePromotionAttachToPromo/${id}`);
-
-    //     return response2.data;
-    // } catch (error) {
-    //     console.log(error);
-    //     return null;
-    // }
+    
   };
 
   toggleToastShow = (libelle) => {
@@ -221,7 +205,7 @@ export default class ListePromotion extends Component {
                     </Link> */}
                       <LignePromotionModal
                         // title
-                        libelle={"Ajout de plat"}
+                        libelle={"Voir détails"}
                         idpro={promo.id}
                         add={true}
                         btnStyle="button is-small is-info"
