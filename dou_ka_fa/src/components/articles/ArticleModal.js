@@ -163,7 +163,7 @@ export default class ArticleModal extends Component {
         >
           <Modal.Header closeButton>
             {this.props.article === null ? (
-              <Modal.Title>Nouveau Article</Modal.Title>
+              <Modal.Title>Nouvel Article</Modal.Title>
             ) : (
               <Modal.Title>Modification Article</Modal.Title>
             )}
@@ -226,7 +226,7 @@ export default class ArticleModal extends Component {
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Point de fidelité</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="Entrer le point de fidelité lors de l'achat"
                   value={
                     this.state.article != null ? this.state.article.point : ""
@@ -279,7 +279,7 @@ export default class ArticleModal extends Component {
             <Modal.Footer>
               <Button
                 disabled={!this.state.formOK}
-                variant="primary"
+                variant="success"
                 onClick={this.doSave}
               >
                 Ajouter

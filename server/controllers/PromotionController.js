@@ -153,6 +153,7 @@ export const getTodayMenu = async (req, res) => {
               promotionId: menuJour.id,
             },
           }).then((list) => {
+            console.log("succes");
             list.length > 0
               ? res
                   .status(200)
@@ -162,6 +163,8 @@ export const getTodayMenu = async (req, res) => {
                   .json({ menuJour: menuJour, lignes: lignes, isUsed: false });
           });
         });
+      } else {
+        res.status(200).json({ menuJour: null, lignes: [], isUsed: false });
       }
     });
   } catch (error) {

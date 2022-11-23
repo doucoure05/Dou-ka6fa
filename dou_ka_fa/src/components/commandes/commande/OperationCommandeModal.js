@@ -446,7 +446,7 @@ export default class OperationCommandeModal extends Component {
           </Modal.Body>
           {this.props.add ? (
             <Modal.Footer>
-              <Button variant="primary" onClick={this.doSave}>
+              <Button variant="success" onClick={this.doSave}>
                 Enregistrer la Vente
               </Button>
               <Button variant="danger" onClick={this.annulerCommande}>
@@ -465,7 +465,7 @@ export default class OperationCommandeModal extends Component {
           >
             <Toast.Header closeButton={false}>
               <img
-                src="images/panier_2.png"
+                src="images/online-store_32.png"
                 className="rounded me-2"
                 alt="boost"
               />

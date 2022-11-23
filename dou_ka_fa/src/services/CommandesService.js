@@ -31,6 +31,8 @@ export const createCommande = async (commande) => {
       total: commande.total,
       clientId: commande.clientId === 0 ? null : commande.clientId,
       dateCommande: Date.now(),
+      promotionId: commande.promotionId,
+      qtePromotion: commande.qtePromotion,
       // dateCommande: formatDate(Date.now()),
       // qteJour: article.qteJour,
       // prix: article.prix,

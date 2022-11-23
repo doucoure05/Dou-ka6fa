@@ -1,11 +1,11 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import // BrowserRouter as Router,
-  // Route,
-  // Routes,
-  // Link,
-  // BrowserRouter,
-  "react-router-dom";
+// Route,
+// Routes,
+// Link,
+// BrowserRouter,
+"react-router-dom";
 import {
   //   BrowserRouter as Router,
   Route,
@@ -19,36 +19,35 @@ import {
 // import ListClient from "./components/clients/ListClient";
 import Base from "./components/Base";
 import Login from "../src/components/Login";
+import { Component } from "react";
 
-function App() {
-  return (
-    <>
-      <Base />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/base" element={<Base />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </>
-    // <Base />
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      connect: true,
+    };
+  }
 
-    // <Router>
-    //   <nav className="navbar navbar-expand navbar-brand m-2">
-    //     <ul className="navbar-nav">
-    //       <li>
-    //         <Link className="nav-link" to="/Login">Login </Link>
-    //       </li>
-    //     </ul>
+  log = (event) => {
+    console.log("ON LOG");
+    this.setState({
+      connect: true,
+    });
+  };
 
-    //   </nav>
+  render() {
+    return (
+      <>
+        {this.state.connect ? <Base /> : <Login onLog={this.log.bind(this)} />}
 
-    //   <div className="m-4">
-    //   <Routes>
-    //       <Route path="/Login" element={<Login/>} ></Route>
-    //     </Routes>
-    //   </div>
-    // </Router>
-  );
+        {/* <Base /> */}
+        {/* <BrowserRouter>
+          <Routes>
+            <Route path="/base" element={<Base />}></Route>
+          </Routes>
+        </BrowserRouter> */}
+      </>
+    );
+  }
 }
-
-export default App;

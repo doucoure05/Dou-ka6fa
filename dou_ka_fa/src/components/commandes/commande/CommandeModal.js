@@ -56,6 +56,7 @@ export default class CommandeModal extends Component {
 
   doSave = () => {
     // console.log("On Save");
+    console.log(this.state.commande);
     let success = false;
     service.createCommande(this.state.commande).then((article) => {
       if (article.id != null) {
@@ -742,7 +743,7 @@ export default class CommandeModal extends Component {
           <Modal.Footer>
             <Button
               disabled={!this.state.formOK}
-              variant="primary"
+              variant="success"
               onClick={this.doSave}
             >
               Valider
@@ -762,7 +763,7 @@ export default class CommandeModal extends Component {
           >
             <Toast.Header closeButton={false}>
               <img
-                src="images/panier_2.png"
+                src="images/online-store_32.png"
                 className="rounded me-2"
                 alt="boost"
               />

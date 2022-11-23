@@ -18,8 +18,13 @@ export const getVentePeriod = async () => {
   return response.data;
 };
 
-export const getMenuVenduPeriod = async () => {
-  const response = await axios.get("http://localhost:5000/menuVenduPeriod");
+export const getMenuVenduPeriodJ = async () => {
+  const response = await axios.get("http://localhost:5000/menuVenduPeriodJ");
+
+  return response.data;
+};
+export const getMenuVenduPeriodM = async () => {
+  const response = await axios.get("http://localhost:5000/menuVenduPeriodM");
 
   return response.data;
 };
