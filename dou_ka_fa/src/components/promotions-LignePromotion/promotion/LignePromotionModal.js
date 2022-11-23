@@ -152,6 +152,13 @@ export default class LignePromotionModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
+              <p
+                className="text-center"
+                style={{ fontSize: "20px", fontWeight: "bold" }}
+              >
+                <i className="bi bi-card-list" ></i> Infos menu
+              </p>
+              <div className="dropdown-divider"></div>
               <div className="row">
                 <div className="col-sm-6">
                   <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -168,7 +175,14 @@ export default class LignePromotionModal extends Component {
               </div>
             </Form>
             <div className="dropdown-divider"></div>
-            <i className="bi bi-cart" ></i> Article
+            <br/>
+            <p
+              className="text-center"
+              style={{ fontSize: "20px", fontWeight: "bold" }}
+            >
+              <i className="bi bi-cart" ></i> Plat
+            </p>
+            
             <table className="table">
               <thead>
                 <tr>
