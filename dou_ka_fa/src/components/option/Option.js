@@ -4,6 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ListCategorie from "./categorie/ListCategorie";
 import ListSeuil from "./seuil/ListSeuil";
+import ListeMenuJour from "./detailsMenuJour/ListeMenuJour"; 
 
 export default class Option extends Component {
   render() {
@@ -40,6 +41,9 @@ export default class Option extends Component {
               </Tab>
               <Tab eventKey="seuil" title="Seuil">
                 <ListSeuil />
+              </Tab>
+              <Tab eventKey="menuJour" title="Details du Menu du jour">
+                <ListeMenuJour />
               </Tab>
             </Tabs>
           </div>

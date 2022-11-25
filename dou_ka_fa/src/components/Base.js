@@ -9,6 +9,8 @@ import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
 import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
+import Article from "../models/Article";
+import ListeMenuJour from "./option/detailsMenuJour/ListeMenuJour";
 
 import UserProfile from "../userProfile/UserProfile";
 export default class Base extends Component {
@@ -348,6 +350,7 @@ export default class Base extends Component {
               <div className="content-wrapper">
                 <Routes>
                   <Route path="/" element={<Dashboard />}></Route>
+                  <Route path="/article" element={<ListArticle />}></Route>
                   <Route path="/home" element={<Dashboard />}></Route>
                   <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
