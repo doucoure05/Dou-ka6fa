@@ -8,6 +8,8 @@ import OperationCommandeModal from "./OperationCommandeModal";
 
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/esm/Button.js";
 
 export default class ListeCommande extends Component {
   constructor(props) {
@@ -17,8 +19,92 @@ export default class ListeCommande extends Component {
       listClient: [],
       toastShow: false,
       toastLibelle: "",
+      tableRows: [],
+      searchWord: "",
+      formOK: false,
     };
   }
+
+  handleChange(event) {
+    let fleldVal = event.target.value;
+    this.setState(
+      {
+        searchWord: fleldVal,
+      },
+      () => {
+        this.checkForm();
+      }
+    );
+  }
+
+  checkForm() {
+    let isword = false;
+
+    if (this.state.searchWord != null) {
+      if (this.state.searchWord.length > 0) {
+        isword = true;
+      }
+    }
+
+    this.setState({
+      formOK: isword,
+    });
+  }
+
+  search = () => {
+    if (this.state.searchWord.length > 0) {
+      if (this.state.searchWord.split("#").length > 1) {
+        if (this.state.searchWord.split("#")[0].toLowerCase() === "c") {
+          this.setState({
+            tableRows: [...this.state.listCommande].filter((art) =>
+              art.clientName.includes(this.state.searchWord.split("#")[1])
+            ),
+          });
+        } else if (this.state.searchWord.split("#")[0].toLowerCase() === "t") {
+          this.setState({
+            tableRows: [...this.state.listCommande].filter((art) =>
+              art.total.toString().includes(this.state.searchWord.split("#")[1])
+            ),
+          });
+        } else if (this.state.searchWord.split("#")[0].toLowerCase() === "d") {
+          this.setState({
+            tableRows: [...this.state.listCommande].filter((art) =>
+              this.formatDate(art.dateCommande).includes(
+                this.state.searchWord.split("#")[1]
+              )
+            ),
+          });
+        } else if (this.state.searchWord.split("#")[0].toLowerCase() === "n") {
+          this.setState({
+            tableRows: [...this.state.listCommande].filter((art) =>
+              art.id.toString().includes(this.state.searchWord.split("#")[1])
+            ),
+          });
+        }
+      } else {
+        this.setState({
+          tableRows: [...this.state.listCommande].filter(
+            (art) =>
+              this.formatDate(art.dateCommande).includes(
+                this.state.searchWord
+              ) ||
+              this.formatDate(art.dateVente).includes(this.state.searchWord) ||
+              art.id.toString().includes(this.state.searchWord) ||
+              art.total.toString().includes(this.state.searchWord) ||
+              art.clientName.toLowerCase().includes(this.state.searchWord) ||
+              art.pointUtilise.toString().includes(this.state.searchWord) ||
+              art.prixPoint.toString().includes(this.state.searchWord) ||
+              art.prixTotalPaye.toString().includes(this.state.searchWord)
+          ),
+        });
+      }
+    } else {
+      this.setState({
+        tableRows: [...this.state.listCommande],
+      });
+    }
+  };
+
   formatDate = (date) => {
     let dt = date.split("-");
     let dtt = dt[2].split("T");
@@ -55,7 +141,9 @@ export default class ListeCommande extends Component {
         {
           listClient: list,
         },
-        () => {}
+        () => {
+          this.getListCommande();
+        }
       );
     });
   }
@@ -78,10 +166,12 @@ export default class ListeCommande extends Component {
           commande.qtePromotion,
           commande.promotionId
         );
+        com.clientName = this.getClientName(com.clientId);
         list.push(com);
       });
       this.setState({
         listCommande: list,
+        tableRows: [...list],
       });
     });
   }
@@ -136,52 +226,77 @@ export default class ListeCommande extends Component {
               onSave={this.onSave}
               onClose={this.getListCommande.bind(this)}
             />
-
             {this.state.listCommande.length > 0 ? (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th width={100}>N°</th>
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th width={150}>Prix</th>
-                    <th width={50}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.listCommande.map((commande, index) => (
-                    <tr key={commande.id}>
-                      <td>{commande.id}</td>
-                      <td>
-                        {
-                          this.formatDate(commande.dateCommande)
-                          // commande.dateCommande
-                        }
-                      </td>
-                      <td>{this.getClientName(commande.clientId)}</td>
-                      <td>{commande.total}</td>
-                      <td>
-                        {
-                          // <CommandeModal
-                          //   libelle={"Editer"}
-                          //   add={true}
-                          //   commande={commande}
-                          //   btnStyle="button is-small is-info"
-                          //   onSave={this.onUpdate}
-                          //   onDelete={this.onDelete}
-                          //   btnIcon="bi bi-pencil"
-                          // />
-                          <OperationCommandeModal
-                            commande={commande}
-                            onClose={this.onClose.bind(this)}
-                            add={true}
+              <div className="row">
+                <div className="col-md-9"></div>
+                <div className="col-md-3">
+                  <div className="row">
+                    <div className="col-md-9">
+                      <Form>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            size="sm"
+                            type="text"
+                            placeholder="Recherche"
+                            value={this.state.searchWord}
+                            name="word"
+                            autoComplete="off"
+                            onChange={this.handleChange.bind(this)}
                           />
-                        }
-                      </td>
+                        </Form.Group>
+                      </Form>
+                    </div>
+                    <div className="col-md-3">
+                      <Button
+                        className="btn btn-block btn-sm"
+                        variant="success"
+                        onClick={this.search}
+                      >
+                        <i className="bi bi-search"></i>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.listCommande.length > 0 ? (
+              <>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th width={100}>N°</th>
+                      <th>Date</th>
+                      <th>Client</th>
+                      <th width={150}>Total</th>
+                      <th width={50}></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {this.state.tableRows.map((commande, index) => (
+                      <tr key={commande.id}>
+                        <td>{commande.id}</td>
+                        <td>{this.formatDate(commande.dateCommande)}</td>
+                        <td>{commande.clientName}</td>
+                        <td>{commande.total}</td>
+                        <td>
+                          {
+                            <OperationCommandeModal
+                              commande={commande}
+                              onClose={this.onClose.bind(this)}
+                              add={true}
+                            />
+                          }
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {this.state.tableRows.length > 0 ? null : (
+                  <h2 className="text-center display-4">
+                    Aucun élément trouvé
+                  </h2>
+                )}
+              </>
             ) : (
               <h2 className="text-center display-4">
                 Aucune Commande en cours

@@ -1,4 +1,3 @@
-// import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -6,22 +5,20 @@ import Form from "react-bootstrap/Form";
 
 import React, { Component } from "react";
 
-export default class ClientModal extends Component {
+export default class UserModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
-      client: null,
+      user: null,
       formOK: false,
     };
   }
 
-  //   const [show, setShow] = useState(false);
-
   handleClose = () => {
     this.setState({
       //Vider tous les champs ici
-      client: null,
+      user: null,
       show: false,
       formOK: false,
     });
@@ -29,8 +26,8 @@ export default class ClientModal extends Component {
   handleShow = () => {
     this.setState({
       show: true,
-      client: this.props.client,
-      formOK: this.props.client != null,
+      user: this.props.user,
+      formOK: this.props.user != null,
     });
   };
 
@@ -40,8 +37,8 @@ export default class ClientModal extends Component {
     let fleldVal = event.target.value;
     this.setState(
       {
-        client: {
-          ...this.state.client,
+        user: {
+          ...this.state.user,
           [fieldName]: fleldVal,
         },
       },
@@ -55,56 +52,70 @@ export default class ClientModal extends Component {
     let isnom = false;
     let isprenom = false;
     let istelephone = false;
-    let isadresse = false;
-    if (this.state.client.nom != null) {
-      if (this.state.client.nom.length > 0) {
+    let islogin = false;
+    let ispassword = false;
+    let isprofil = false;
+    if (this.state.user.nom != null) {
+      if (this.state.user.nom.length > 0) {
         isnom = true;
       }
     }
-    if (this.state.client.prenom != null) {
-      if (this.state.client.prenom.length > 0) {
+    if (this.state.user.prenom != null) {
+      if (this.state.user.prenom.length > 0) {
         isprenom = true;
       }
     }
-    if (this.state.client.telephone != null) {
-      if (this.state.client.telephone.length > 0) {
+    if (this.state.user.telephone != null) {
+      if (this.state.user.telephone.length > 0) {
         istelephone = true;
       }
     }
-    if (this.state.client.adresse != null) {
-      if (this.state.client.adresse.length > 0) {
-        isadresse = true;
+    if (this.state.user.login != null) {
+      if (this.state.user.login.length > 0) {
+        islogin = true;
+      }
+    }
+    if (this.state.user.password != null) {
+      if (this.state.user.password.length > 0) {
+        ispassword = true;
+      }
+    }
+    if (this.state.user.profil != null) {
+      if (this.state.user.profil.length > 0) {
+        isprofil = true;
       }
     }
     this.setState({
-      formOK: isnom && isprenom && istelephone && isadresse,
+      formOK:
+        isnom && isprenom && istelephone && islogin && ispassword && isprofil,
     });
   }
 
   componentDidMount() {
     this.setState({
-      client: this.props.client,
+      user: this.props.user,
     });
   }
 
   doSave = (event) => {
-    this.props.onSave(this.state.client);
+    this.props.onSave(this.state.user);
     this.handleClose();
   };
 
   doUpdate = (event) => {
-    this.props.onSave(this.state.client);
+    this.props.onSave(this.state.user);
     this.handleClose();
   };
 
   doDelete = (event) => {
-    this.props.onDelete(this.state.client);
+    this.props.onDelete(this.state.user);
     this.handleClose();
   };
+
   render() {
     return (
       <>
-        <div className={this.props.client === null ? "mb-4" : ""}>
+        <div className={this.props.user === null ? "mb-4" : ""}>
           <Button className={this.props.btnStyle} onClick={this.handleShow}>
             <i className={this.props.btnIcon}></i> {this.props.libelle}
           </Button>
@@ -122,20 +133,20 @@ export default class ClientModal extends Component {
           className="modal-dialog modal-xl"
         >
           <Modal.Header closeButton>
-            {this.props.client === null ? (
-              <Modal.Title>Nouveau Client</Modal.Title>
+            {this.props.user === null ? (
+              <Modal.Title>Nouvel Utilisateur</Modal.Title>
             ) : (
-              <Modal.Title>Modification Client</Modal.Title>
+              <Modal.Title>Modification Utilisateur</Modal.Title>
             )}
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3">
                 <Form.Label>Nom</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Entrer le nom"
-                  value={this.state.client != null ? this.state.client.nom : ""}
+                  value={this.state.user != null ? this.state.user.nom : ""}
                   name="nom"
                   onChange={this.handleChange.bind(this)}
                 />
@@ -143,45 +154,68 @@ export default class ClientModal extends Component {
                 We'll never share your email with anyone else.
               </Form.Text> */}
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3">
                 <Form.Label>Prénom</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Entrer le prénom"
-                  value={
-                    this.state.client != null ? this.state.client.prenom : ""
-                  }
+                  value={this.state.user != null ? this.state.user.prenom : ""}
                   name="prenom"
                   onChange={this.handleChange.bind(this)}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3">
                 <Form.Label>Téléphone</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Entrer le téléphone"
                   value={
-                    this.state.client != null ? this.state.client.telephone : ""
+                    this.state.user != null ? this.state.user.telephone : ""
                   }
                   name="telephone"
                   onChange={this.handleChange.bind(this)}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Adresse</Form.Label>
+              <Form.Group className="mb-3">
+                <Form.Label>Nom d'utilisateur</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Entrer l'adresse"
-                  value={
-                    this.state.client != null ? this.state.client.adresse : ""
-                  }
-                  name="adresse"
+                  disabled={this.props.user != null}
+                  placeholder="Entrer le nom d'utilisateur"
+                  value={this.state.user != null ? this.state.user.login : ""}
+                  name="login"
                   onChange={this.handleChange.bind(this)}
                 />
               </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Mot de passe</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Entrer le mot de passe"
+                  value={
+                    this.state.user != null ? this.state.user.password : ""
+                  }
+                  name="password"
+                  onChange={this.handleChange.bind(this)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Profil</Form.Label>
+                <Form.Select
+                  aria-label="Default select example"
+                  name="profil"
+                  value={this.state.user != null ? this.state.user.profil : ""}
+                  onChange={this.handleChange.bind(this)}
+                >
+                  <option value={""}>Selection un profil</option>
+                  <option value={"Utilisateur"}>Utilisateur</option>
+                  <option value={"Administrateur"}>Administrateur</option>
+                </Form.Select>
+              </Form.Group>
             </Form>
           </Modal.Body>
-          {this.props.client === null ? (
+          {this.props.user === null ? (
             <Modal.Footer>
               <Button
                 disabled={!this.state.formOK}
@@ -213,5 +247,3 @@ export default class ClientModal extends Component {
     );
   }
 }
-
-// export default ClientModal;

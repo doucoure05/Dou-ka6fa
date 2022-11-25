@@ -27,11 +27,6 @@ const Commande = db.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-
-    // addPromotion: {
-    //   type: DataTypes.INTEGER,
-    //   defaultValue: 0,
-    // },
     clientId: {
       type: DataTypes.INTEGER,
       references: { model: "clients", key: "id" },
@@ -40,6 +35,7 @@ const Commande = db.define(
       type: DataTypes.INTEGER,
       references: { model: "promotions", key: "id" },
     },
+    lieuLivraison: DataTypes.STRING,
   },
   {
     freezeTableName: true,

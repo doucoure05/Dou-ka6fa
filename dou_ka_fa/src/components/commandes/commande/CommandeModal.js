@@ -493,13 +493,15 @@ export default class CommandeModal extends Component {
   render() {
     return (
       <>
-        <Button
-          disabled={this.state.show}
-          className={this.props.btnStyle}
-          onClick={this.handleShow}
-        >
-          <i className={this.props.btnIcon}></i> {this.props.libelle}
-        </Button>
+        <div className="mb-4">
+          <Button
+            disabled={this.state.show}
+            className={this.props.btnStyle}
+            onClick={this.handleShow}
+          >
+            <i className={this.props.btnIcon}></i> {this.props.libelle}
+          </Button>
+        </div>
 
         <Modal
           show={this.state.show}

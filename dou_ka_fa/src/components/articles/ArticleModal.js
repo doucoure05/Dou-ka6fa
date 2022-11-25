@@ -297,7 +297,7 @@ export default class ArticleModal extends Component {
               >
                 Modifier
               </Button>
-              <Button variant="secondary" onClick={this.doDelete}>
+              <Button variant="danger" onClick={this.doDelete}>
                 Supprimer
               </Button>
             </Modal.Footer>

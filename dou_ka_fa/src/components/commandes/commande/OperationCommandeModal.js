@@ -16,7 +16,7 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import Seuil from "../../../models/Seuil";
 import * as seuilService from "../../../services/SeuilService";
 
-import Spinner from "react-bootstrap/Spinner";
+import UserProfile from "../../../userProfile/UserProfile";
 
 export default class OperationCommandeModal extends Component {
   constructor(props) {
@@ -451,6 +451,13 @@ export default class OperationCommandeModal extends Component {
               </Button>
               <Button variant="danger" onClick={this.annulerCommande}>
                 Annuler la commande
+              </Button>
+            </Modal.Footer>
+          ) : null}
+          {UserProfile.getProfile() === "Administrateur" ? (
+            <Modal.Footer>
+              <Button variant="danger" onClick={this.annulerCommande}>
+                Supprimer la vente
               </Button>
             </Modal.Footer>
           ) : null}

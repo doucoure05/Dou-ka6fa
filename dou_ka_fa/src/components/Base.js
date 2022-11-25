@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
-// import "./App.css";
-import {
-  //   BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, Routes, Link, BrowserRouter } from "react-router-dom";
 
 import UserList from "./users/UserList";
 
@@ -15,15 +7,16 @@ import ListClient from "./clients/ListClient";
 import ListArticle from "./articles/ListArticle";
 import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
-import MenuJourTouMenu from "./promotions-LignePromotion/MenuJourTouMenu.js";
 import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
 
+import UserProfile from "../userProfile/UserProfile";
 export default class Base extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: "Acceuil",
+      isAdmin: false,
     };
   }
   handleActive = (event) => {
@@ -32,6 +25,15 @@ export default class Base extends Component {
       active: event.target.text.trim(),
     });
   };
+  // componentDidUpdate() {
+  //   console.log(UserProfile.getName() + UserProfile.getProfile());
+  // }
+
+  componentDidMount() {
+    console.log(UserProfile.getName() + UserProfile.getProfile());
+    this.setState({ isAdmin: UserProfile.getProfile() === "Administrateur" });
+  }
+
   render() {
     return (
       <>
@@ -191,7 +193,7 @@ export default class Base extends Component {
                           to="/commande"
                           onClick={this.handleActive}
                         >
-                          <i className="bi bi-cash-coin"></i> Commande/Vente
+                          <i className="bi bi-coin"></i> Commande/Vente
                         </Link>
                       </li>
                       <li className="nav-item">
@@ -204,22 +206,10 @@ export default class Base extends Component {
                           to="/client"
                           onClick={this.handleActive}
                         >
-                          <i className="bi bi-house"></i> Client
+                          <i className="bi bi-people"></i> Client
                         </Link>
                       </li>
-                      <li className="nav-item">
-                        <Link
-                          className={
-                            this.state.active === "Articles"
-                              ? "nav-link active"
-                              : "nav-link"
-                          }
-                          to="/article"
-                          onClick={this.handleActive}
-                        >
-                          <i className="bi bi-house"></i> Articles
-                        </Link>
-                      </li>
+
                       <li className="nav-item">
                         <Link
                           className={
@@ -233,6 +223,22 @@ export default class Base extends Component {
                           <i className="bi bi-house"></i> Options
                         </Link>
                       </li>
+
+                      {this.state.isAdmin ? (
+                        <li className="nav-item">
+                          <Link
+                            className={
+                              this.state.active === "Utilisateurs"
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                            to="/users"
+                            onClick={this.handleActive}
+                          >
+                            <i className="bi bi-person-circle"></i> Utilisateurs
+                          </Link>
+                        </li>
+                      ) : null}
                     </ul>
                   </div>
                 </div>
@@ -345,9 +351,9 @@ export default class Base extends Component {
                   <Route path="/home" element={<Dashboard />}></Route>
                   <Route path="/add" element={<AddUser />}></Route>
                   <Route path="/client" element={<ListClient />}></Route>
-                  <Route path="/article" element={<MenuJourTouMenu />}></Route>
                   <Route path="/option" element={<Option />}></Route>
                   <Route path="/menu" element={<ListArticle />}></Route>
+                  <Route path="/users" element={<UserList />}></Route>
                   <Route
                     path="/commande"
                     element={<ListCommandeVente />}
