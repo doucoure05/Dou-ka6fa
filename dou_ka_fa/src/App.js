@@ -62,7 +62,7 @@ export default class App extends Component {
   render() {
     return (
       <>
-        {this.state.user === null ? (
+        {this.state.user !== null ? (
           <Base onLogOut={this.logOut} />
         ) : (
           <Login onLog={this.log} />

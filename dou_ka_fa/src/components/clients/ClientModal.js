@@ -120,7 +120,7 @@ export default class ClientModal extends Component {
         );
         list.push(cl);
       });
-      console.log(list);
+      // console.log(list);
       this.setState(
         {
           listClient: list,
