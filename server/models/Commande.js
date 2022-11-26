@@ -8,11 +8,6 @@ const Commande = db.define(
   {
     dateCommande: {
       type: DataTypes.DATE,
-      // get: function () {
-      //   return this.getDataValue("dateCommande").toLocaleString("fr-FR", {
-      //     timeZone: "UTC",
-      //   });
-      // },
     },
     dateVente: DataTypes.DATE,
     total: DataTypes.DOUBLE,

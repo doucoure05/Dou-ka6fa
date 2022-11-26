@@ -11,6 +11,7 @@ import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
 
 import UserProfile from "../userProfile/UserProfile";
+import Button from "react-bootstrap/esm/Button";
 export default class Base extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,9 @@ export default class Base extends Component {
       isAdmin: false,
     };
   }
+  onLogOut = () => {
+    this.props.onLogOut();
+  };
   handleActive = (event) => {
     // console.log(event.target.text);
     this.setState({
@@ -30,7 +34,7 @@ export default class Base extends Component {
   // }
 
   componentDidMount() {
-    console.log(UserProfile.getName() + UserProfile.getProfile());
+    // console.log(UserProfile.getName() + UserProfile.getProfile());
     this.setState({ isAdmin: UserProfile.getProfile() === "Administrateur" });
   }
 
@@ -239,6 +243,13 @@ export default class Base extends Component {
                           </Link>
                         </li>
                       ) : null}
+                      <Button
+                        className="btn  btn-danger btn-sm"
+                        onClick={this.onLogOut}
+                      >
+                        <i class="bi bi-box-arrow-in-left"></i>
+                        Déconnexion
+                      </Button>
                     </ul>
                   </div>
                 </div>

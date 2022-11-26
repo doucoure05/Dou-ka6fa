@@ -91,10 +91,7 @@ export default class ListeCommande extends Component {
               this.formatDate(art.dateVente).includes(this.state.searchWord) ||
               art.id.toString().includes(this.state.searchWord) ||
               art.total.toString().includes(this.state.searchWord) ||
-              art.clientName.toLowerCase().includes(this.state.searchWord) ||
-              art.pointUtilise.toString().includes(this.state.searchWord) ||
-              art.prixPoint.toString().includes(this.state.searchWord) ||
-              art.prixTotalPaye.toString().includes(this.state.searchWord)
+              art.clientName.toLowerCase().includes(this.state.searchWord)
           ),
         });
       }
@@ -278,27 +275,23 @@ export default class ListeCommande extends Component {
                     {this.state.tableRows.map((commande, index) => (
                       <tr key={commande.id}>
                         <td>{commande.id}</td>
-                        <td>{
-                          commande.statut === 0 &&
-                          <span class="badge bg-secondary">EAPR</span>
-                          }
-                          {
-                          commande.statut === 1 &&
-                          <span class="badge bg-danger">ECPR</span>
-                          }
-                          {
-                          commande.statut === 2 &&
-                          <span class="badge bg-warning">EALI</span>
-                          }
-                          {
-                          commande.statut === 3 &&
-                          <span class="badge bg-primary">ECLI</span>
-                          }
-                          {
-                          commande.statut === 4 &&
-                          <span class="badge bg-success">EAPA</span>
-                          }
-                          </td>
+                        <td>
+                          {commande.statut === 0 && (
+                            <span class="badge bg-secondary">EAPR</span>
+                          )}
+                          {commande.statut === 1 && (
+                            <span class="badge bg-danger">ECPR</span>
+                          )}
+                          {commande.statut === 2 && (
+                            <span class="badge bg-warning">EALI</span>
+                          )}
+                          {commande.statut === 3 && (
+                            <span class="badge bg-primary">ECLI</span>
+                          )}
+                          {commande.statut === 4 && (
+                            <span class="badge bg-success">EAPA</span>
+                          )}
+                        </td>
                         <td>{this.formatDate(commande.dateCommande)}</td>
                         <td>{commande.clientName}</td>
                         <td>{commande.total}</td>

@@ -133,7 +133,10 @@ export default class ListVente extends Component {
               ) ||
               art.id.toString().includes(this.state.searchWord) ||
               art.total.toString().includes(this.state.searchWord) ||
-              art.clientName.toLowerCase().includes(this.state.searchWord)
+              art.clientName.toLowerCase().includes(this.state.searchWord) ||
+              art.pointUtilise.toString().includes(this.state.searchWord) ||
+              art.prixPoint.toString().includes(this.state.searchWord) ||
+              art.prixTotalPaye.toString().includes(this.state.searchWord)
           ),
         });
       }

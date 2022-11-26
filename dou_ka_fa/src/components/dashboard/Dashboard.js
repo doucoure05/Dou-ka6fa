@@ -135,9 +135,15 @@ export default class Dashboard extends Component {
         list.article = this.getArticleById(list.articleId);
         return list;
       });
-      this.setState({
-        menuPlusVendus: myList,
-      });
+      // console.log(myList);
+      this.setState(
+        {
+          menuPlusVendus: [...myList],
+        },
+        () => {
+          console.log(this.state.menuPlusVendus.length);
+        }
+      );
     });
   }
 
@@ -312,7 +318,7 @@ export default class Dashboard extends Component {
                       </h3>
                     </div>
                     <div className="card-body p-0">
-                      {this.state.menuPlusVendus.lenght > 0 ? (
+                      {this.state.menuPlusVendus.length > 0 ? (
                         <table className="table">
                           <thead>
                             <tr>

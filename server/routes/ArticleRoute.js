@@ -7,5 +7,6 @@ router.get("/article/:id", cc.getArticleById);
 router.post("/article", cc.createArticle);
 router.patch("/article/:id", cc.updateArticle);
 router.delete("/article/:id", cc.deleteArticle);
+router.get("/articleVenduToday", cc.articleVenduToday);
 
 export default router;

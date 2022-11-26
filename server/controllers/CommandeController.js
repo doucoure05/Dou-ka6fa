@@ -11,6 +11,7 @@ export const getCommande = async (req, res) => {
       where: {
         etat: 0,
       },
+      // order: [["dateCommande", "ASC"]],
     });
     res.status(200).json(response);
   } catch (error) {
@@ -100,14 +101,11 @@ export const annulerCommande = async (req, res) => {
 
 export const updateCommandeToVente = async (req, res) => {
   try {
-    console.log(req.params.id);
     const comm = await Commande.update(req.body, {
       where: {
         id: req.params.id,
       },
     });
-    console.log("**************************");
-    console.log(req.body.pointUtilise != null);
     if (req.body.pointUtilise != null) {
       //On a le point qui est utilisé
       await initClientPoints(req.body.clientId);
@@ -136,6 +134,10 @@ export const updateOnlyCommande = async (req, res) => {
 };
 
 async function increaseClientPoints(commandeId) {
+  /*
+    Methode permettant de'ajouter les point de fidelité prevu par les articles 
+    d'une commande apès la validation de la commande
+  */
   try {
     await Commande.findOne({
       where: {
@@ -217,6 +219,9 @@ async function increaseClientPoints(commandeId) {
 }
 
 async function initClientPoints(clientId) {
+  /*
+    Methode qui permet d'initialiser les points d'un client après l'utilisation des points dans  une commande
+  */
   await Client.update(
     {
       point: 0,

@@ -497,7 +497,6 @@ export default class NewPromotionModal extends Component {
               </Button>
             ) : null}
           </Modal.Footer>
-          )
         </Modal>
       </>
     );

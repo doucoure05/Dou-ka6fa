@@ -124,6 +124,9 @@ export const getLigneByMenu = async (req, res) => {
 };
 
 export const getTodayMenu = async (req, res) => {
+  /*
+    Methode qui recupère  le menu du jour d'aujourdh'ui
+  */
   try {
     let dateMin = new Date();
     dateMin.setMilliseconds(0);

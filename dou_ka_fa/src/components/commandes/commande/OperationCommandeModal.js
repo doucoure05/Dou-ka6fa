@@ -395,7 +395,7 @@ export default class OperationCommandeModal extends Component {
                 }
                 {
                   this.props.commande.statut === 4 && (
-                    <div class="ribbon bg-primary">
+                    <div class="ribbon bg-success">
                       <span style={{ fontSize: "10px" }}>
                         En attente de payement
                       </span>
@@ -430,12 +430,21 @@ export default class OperationCommandeModal extends Component {
                   </div>
                 ) : null}
               </div>
+              {this.props.commande.lieuLivraison != null &&
+              this.props.commande.lieuLivraison.length > 0 ? (
+                <div className="row mt-2">
+                  <div className="col-sm-12 text-center">
+                    Livrason:{" "}
+                    <strong>{this.props.commande.lieuLivraison}</strong>
+                  </div>
+                </div>
+              ) : null}
               <div className="dropdown-divider"></div>
               <p
                 className="text-center"
                 style={{ fontSize: "20px", fontWeight: "bold" }}
               >
-                Articles {this.state.ligneCommande.length}
+                Articles
               </p>
               <table className="table">
                 <thead>

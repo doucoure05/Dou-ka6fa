@@ -6,6 +6,9 @@ import Form from "react-bootstrap/Form";
 
 import React, { Component } from "react";
 
+import * as clientService from "../../services/ClientService";
+import Client from "../../models/Client";
+
 export default class ClientModal extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +16,8 @@ export default class ClientModal extends Component {
       show: false,
       client: null,
       formOK: false,
+      listClient: [],
+      isTelephoneExist: false,
     };
   }
 
@@ -24,6 +29,7 @@ export default class ClientModal extends Component {
       client: null,
       show: false,
       formOK: false,
+      isTelephoneExist: false,
     });
   };
   handleShow = () => {
@@ -56,6 +62,11 @@ export default class ClientModal extends Component {
     let isprenom = false;
     let istelephone = false;
     let isadresse = false;
+    // console.log(
+    //   this.state.listClient.filter(
+    //     (item) => item.telephone === this.state.client.telephone
+    //   )
+    // );
     if (this.state.client.nom != null) {
       if (this.state.client.nom.length > 0) {
         isnom = true;
@@ -68,7 +79,20 @@ export default class ClientModal extends Component {
     }
     if (this.state.client.telephone != null) {
       if (this.state.client.telephone.length > 0) {
-        istelephone = true;
+        if (
+          this.state.listClient.filter(
+            (item) => item.telephone === this.state.client.telephone
+          ).length > 0
+        ) {
+          this.setState({
+            isTelephoneExist: true,
+          });
+        } else {
+          istelephone = true;
+          this.setState({
+            isTelephoneExist: false,
+          });
+        }
       }
     }
     if (this.state.client.adresse != null) {
@@ -81,7 +105,33 @@ export default class ClientModal extends Component {
     });
   }
 
+  getLIstClient() {
+    clientService.getClient().then((clients) => {
+      let list = [];
+      clients.forEach((client) => {
+        let cl = new Client(
+          client.id,
+          client.nom,
+          client.prenom,
+          client.telephone,
+          client.adresse,
+          client.point,
+          client.photo
+        );
+        list.push(cl);
+      });
+      // console.log(list);
+      this.setState(
+        {
+          listClient: list,
+        },
+        () => {}
+      );
+    });
+  }
+
   componentDidMount() {
+    this.getLIstClient();
     this.setState({
       client: this.props.client,
     });
@@ -139,9 +189,6 @@ export default class ClientModal extends Component {
                   name="nom"
                   onChange={this.handleChange.bind(this)}
                 />
-                {/* <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text> */}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Prénom</Form.Label>
@@ -167,6 +214,12 @@ export default class ClientModal extends Component {
                   onChange={this.handleChange.bind(this)}
                 />
               </Form.Group>
+              {this.state.isTelephoneExist ? (
+                <Form.Text className="text-muted">
+                  Ce numero existe déja pour un client.
+                </Form.Text>
+              ) : null}
+
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Adresse</Form.Label>
                 <Form.Control
