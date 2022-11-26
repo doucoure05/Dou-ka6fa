@@ -46,11 +46,27 @@ export default class App extends Component {
       }
     );
   };
+  logOut = () => {
+    this.setState(
+      {
+        user: null,
+      },
+      () => {
+        UserProfile.setName("");
+        UserProfile.setProfile("");
+        this.toggleToastShow("Déconnexion");
+      }
+    );
+  };
 
   render() {
     return (
       <>
-        {this.state.user !== null ? <Base /> : <Login onLog={this.log} />}
+        {this.state.user === null ? (
+          <Base onLogOut={this.logOut} />
+        ) : (
+          <Login onLog={this.log} />
+        )}
 
         <ToastContainer className="p-3" position="top-end">
           <Toast

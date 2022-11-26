@@ -26,6 +26,7 @@ export default class ListArticle extends Component {
       tableRows: [],
       searchWord: "",
       formOK: false,
+      listAllLigneVenteToday: [],
     };
   }
 
@@ -40,6 +41,35 @@ export default class ListArticle extends Component {
       }
     );
   }
+
+  getQteVenteParArticle() {
+    service.getArticleVenduToday().then((list) => {
+      // console.log(list.list);
+      this.setState(
+        {
+          listAllLigneVenteToday: list.list,
+        },
+        () => {
+          this.getLIstArticle();
+        }
+      );
+    });
+  }
+
+  getNbreVenteToday = (articleId) => {
+    let list = this.state.listAllLigneVenteToday.filter(
+      (item) => item.articleId === articleId
+    );
+    if (list.length > 0) {
+      let somme = 0;
+      list.forEach((it) => {
+        somme += it.qte;
+      });
+      return somme;
+    } else {
+      return 0;
+    }
+  };
 
   checkForm() {
     let isword = false;
@@ -136,6 +166,7 @@ export default class ListArticle extends Component {
           article.categorieId
         );
         ar.categorieName = this.getCategorieName(ar.categorieId);
+        ar.nbVenteToday = this.getNbreVenteToday(ar.id);
         list.push(ar);
       });
       this.setState(
@@ -152,6 +183,7 @@ export default class ListArticle extends Component {
   componentDidMount() {
     this.getLIstArticle();
     this.getLIstCategorie();
+    this.getQteVenteParArticle();
   }
 
   onSave = (article) => {
@@ -276,6 +308,8 @@ export default class ListArticle extends Component {
                           <th>Nom</th>
                           <th>Description</th>
                           <th>Qte Journalière</th>
+                          <th>Acheté auj.</th>
+                          <th>Restant auj.</th>
                           <th>Prix</th>
                           <th>Pt de Fidelité</th>
                           <th>Catégorie</th>
@@ -289,6 +323,11 @@ export default class ListArticle extends Component {
                             <td>{article.nom}</td>
                             <td>{article.description}</td>
                             <td>{article.qteJour}</td>
+                            <td>{article.nbVenteToday}</td>
+                            <td>
+                              {Number(article.qteJour) -
+                                Number(article.nbVenteToday)}
+                            </td>
                             <td>{article.prix}</td>
                             <td>{article.point}</td>
                             <td>

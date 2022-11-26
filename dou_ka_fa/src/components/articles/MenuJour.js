@@ -142,7 +142,7 @@ export default class MenuJour extends Component {
         {this.state.menuJour == null ? (
           <div>
             <div className="text-center">
-              <h2>Aucun menu du du jour</h2>
+              <h2>Aucun menu du jour</h2>
             </div>
             <NewPromotionModal
               libelle={"Ajouter un menu du jour"}

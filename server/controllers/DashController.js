@@ -116,7 +116,7 @@ export const getMenuPlusVenduPeriodJ = async (req, res) => {
     });
     let sommeJ = 0;
     if (commandesJ.length > 0) {
-      commandesJ.forEach(async (element) => {
+      for (const element of commandesJ) {
         await LigneCommande.findAll({
           where: {
             commandeId: element.id,
@@ -125,9 +125,9 @@ export const getMenuPlusVenduPeriodJ = async (req, res) => {
           val.forEach((ligne) => {
             sommeJ += ligne.qte;
           });
-          res.status(200).json({ j: sommeJ });
         });
-      });
+      }
+      res.status(200).json({ j: sommeJ });
     } else {
       res.status(200).json({ j: sommeJ });
     }
@@ -163,8 +163,9 @@ export const getMenuPlusVenduPeriodM = async (req, res) => {
       },
     });
     let sommeM = 0;
+
     if (commandesM.length > 0) {
-      commandesM.forEach(async (element) => {
+      for (const element of commandesM) {
         await LigneCommande.findAll({
           where: {
             commandeId: element.id,
@@ -173,9 +174,9 @@ export const getMenuPlusVenduPeriodM = async (req, res) => {
           val.forEach((ligne) => {
             sommeM += ligne.qte;
           });
-          res.status(200).json({ m: sommeM });
         });
-      });
+      }
+      res.status(200).json({ m: sommeM });
     } else {
       res.status(200).json({ m: sommeM });
     }

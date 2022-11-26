@@ -6,6 +6,12 @@ export const getArticle = async () => {
   return response.data;
 };
 
+export const getArticleVenduToday = async () => {
+  const response = await axios.get("http://localhost:5000/articleVenduToday");
+
+  return response.data;
+};
+
 export const deleteArticle = async (id) => {
   try {
     const response = await axios.delete(`http://localhost:5000/article/${id}`);
