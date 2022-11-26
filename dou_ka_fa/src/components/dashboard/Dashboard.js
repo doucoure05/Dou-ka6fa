@@ -183,7 +183,7 @@ export default class Dashboard extends Component {
             <div className="container-fluid">
               <div className="row mb-2">
                 <div className="col-sm-12 text-center">
-                  {/* <h1>WELCOME</h1> */}
+                  <h1>ACCEUIL</h1>
                 </div>
               </div>
             </div>
