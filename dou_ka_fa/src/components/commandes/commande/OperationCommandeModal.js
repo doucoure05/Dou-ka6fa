@@ -537,7 +537,7 @@ export default class OperationCommandeModal extends Component {
               </Button>
             </Modal.Footer>
           ) : null}
-          {UserProfile.getProfile() === "Administrateur" ? (
+          {UserProfile.getProfile() === "Administrateur" && !this.props.add ? (
             <Modal.Footer>
               <Button variant="danger" onClick={this.annulerCommande}>
                 Supprimer la vente
