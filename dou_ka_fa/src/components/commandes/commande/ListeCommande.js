@@ -164,7 +164,9 @@ export default class ListeCommande extends Component {
           commande.etat,
           commande.clientId,
           commande.qtePromotion,
-          commande.promotionId
+          commande.promotionId,
+          commande.lieuLivraison,
+          commande.statut
         );
         com.clientName = this.getClientName(com.clientId);
         list.push(com);
@@ -176,7 +178,7 @@ export default class ListeCommande extends Component {
     });
   }
   componentDidMount() {
-    this.getListCommande();
+    // this.getListCommande();
     this.getLIstClient();
   }
 
@@ -224,7 +226,7 @@ export default class ListeCommande extends Component {
               btnStyle="btn btn-block btn-success"
               btnIcon="bi-plus-circle"
               onSave={this.onSave}
-              onClose={this.getListCommande.bind(this)}
+              onClose={this.getLIstClient.bind(this)}
             />
             {this.state.listCommande.length > 0 ? (
               <div className="row">
@@ -265,6 +267,7 @@ export default class ListeCommande extends Component {
                   <thead>
                     <tr>
                       <th width={100}>N°</th>
+                      <th>État</th>
                       <th>Date</th>
                       <th>Client</th>
                       <th width={150}>Total</th>
@@ -275,6 +278,27 @@ export default class ListeCommande extends Component {
                     {this.state.tableRows.map((commande, index) => (
                       <tr key={commande.id}>
                         <td>{commande.id}</td>
+                        <td>{
+                          commande.statut === 0 &&
+                          <span class="badge bg-secondary">EAPR</span>
+                          }
+                          {
+                          commande.statut === 1 &&
+                          <span class="badge bg-danger">ECPR</span>
+                          }
+                          {
+                          commande.statut === 2 &&
+                          <span class="badge bg-warning">EALI</span>
+                          }
+                          {
+                          commande.statut === 3 &&
+                          <span class="badge bg-primary">ECLI</span>
+                          }
+                          {
+                          commande.statut === 4 &&
+                          <span class="badge bg-success">EAPA</span>
+                          }
+                          </td>
                         <td>{this.formatDate(commande.dateCommande)}</td>
                         <td>{commande.clientName}</td>
                         <td>{commande.total}</td>

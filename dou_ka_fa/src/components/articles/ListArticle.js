@@ -180,7 +180,7 @@ export default class ListArticle extends Component {
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression.";
+          : "Suppression impossible! Ce article est utilisé dans des Opérations.";
       this.toggleToastShow(msg);
     });
   };

@@ -50,7 +50,7 @@ export default class App extends Component {
   render() {
     return (
       <>
-        {this.state.user === null ? <Base /> : <Login onLog={this.log} />}
+        {!this.state.user === null ? <Base /> : <Login onLog={this.log} />}
 
         <ToastContainer className="p-3" position="top-end">
           <Toast

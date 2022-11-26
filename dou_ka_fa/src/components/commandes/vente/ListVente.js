@@ -203,7 +203,9 @@ export default class ListVente extends Component {
           commande.etat,
           commande.clientId,
           commande.qtePromotion,
-          commande.promotionId
+          commande.promotionId,
+          commande.lieuLivraison,
+          commande.statut
         );
         com.clientName = this.getClientName(com.clientId);
         list.push(com);

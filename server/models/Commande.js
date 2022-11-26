@@ -36,6 +36,15 @@ const Commande = db.define(
       references: { model: "promotions", key: "id" },
     },
     lieuLivraison: DataTypes.STRING,
+    statut: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      //0: en attente de préparation
+      //1: En cous de préparation
+      //2: En Attente de livrason
+      //3: En cours de livraison
+      //4: En Attente de paiement
+    },
   },
   {
     freezeTableName: true,

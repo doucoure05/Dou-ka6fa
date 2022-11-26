@@ -71,7 +71,7 @@ export default class ListClient extends Component {
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression.";
+          : "Suppression impossible! Nous avons des opérations lié à ce client.";
       this.toggleToastShow(msg);
     });
   };

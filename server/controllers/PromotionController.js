@@ -6,7 +6,9 @@ const Op = Sequelize.Op;
 
 export const getPromotion = async (req, res) => {
   try {
-    const response = await Promotion.findAll();
+    const response = await Promotion.findAll({
+      order: [["datePromotion", "DESC"]],
+    });
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);

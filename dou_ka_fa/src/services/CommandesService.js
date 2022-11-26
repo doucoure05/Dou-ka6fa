@@ -122,3 +122,19 @@ export const updateCommandeToVente = async (commande) => {
     return null;
   }
 };
+
+export const updateOnlyCommande = async (commande) => {
+  try {
+    const response = await axios.patch(
+      `http://localhost:5000/updateOnlyCommande/${commande.id}`,
+      {
+        statut: commande.statut,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

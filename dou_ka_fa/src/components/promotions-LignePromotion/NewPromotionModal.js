@@ -426,17 +426,17 @@ export default class NewPromotionModal extends Component {
                     />
                   </Form.Group>
                 </div>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Button
-                      disabled={!this.state.formLigneOK}
-                      className="btn btn-block"
-                      onClick={this.addToLigne}
-                      variant="success"
-                    >
-                      Ajouter
-                    </Button>
-                  </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-12">
+                  <Button
+                    disabled={!this.state.formLigneOK}
+                    className="btn btn-block"
+                    onClick={this.addToLigne}
+                    variant="success"
+                  >
+                    Ajouter
+                  </Button>
                 </div>
               </div>
             </Form>

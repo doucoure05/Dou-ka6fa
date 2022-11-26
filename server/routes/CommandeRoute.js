@@ -9,4 +9,6 @@ router.post("/ligneCommande", cc.createLigneCommande);
 router.get("/ligneCommandeByCommand/:id", cc.getLigneByCommande);
 router.delete("/annulerCommande/:id", cc.annulerCommande);
 router.patch("/commandeToVente/:id", cc.updateCommandeToVente);
+
+router.patch("/updateOnlyCommande/:id", cc.updateOnlyCommande);
 export default router;

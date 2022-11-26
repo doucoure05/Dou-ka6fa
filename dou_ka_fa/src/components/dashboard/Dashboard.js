@@ -182,8 +182,8 @@ export default class Dashboard extends Component {
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
-                <div className="col-sm-6">
-                  <h1>Acceuil</h1>
+                <div className="col-sm-12 text-center">
+                  {/* <h1>WELCOME</h1> */}
                 </div>
               </div>
             </div>

@@ -9,8 +9,6 @@ import Option from "./option/Option";
 import ListCommandeVente from "./commandes/ListCommandeVente";
 import AddUser from "./users/AddUser";
 import Dashboard from "./dashboard/Dashboard";
-import Article from "../models/Article";
-import ListeMenuJour from "./option/detailsMenuJour/ListeMenuJour";
 
 import UserProfile from "../userProfile/UserProfile";
 export default class Base extends Component {

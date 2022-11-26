@@ -8,4 +8,6 @@ router.post("/client", cc.createClient);
 router.patch("/client/:id", cc.updateClient);
 router.delete("/client/:id", cc.deleteClient);
 
+router.post("/clientR", cc.createAndReturnClient);
+
 export default router;

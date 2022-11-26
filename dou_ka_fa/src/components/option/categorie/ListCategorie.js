@@ -65,7 +65,7 @@ export default class ListCategorie extends Component {
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression. Verifier si ola catégorie nest pas utilisé par un article.";
+          : "Suppression impossible! Cette catégorie est utilisé par un article.";
       this.toggleToastShow(msg);
     });
   };
