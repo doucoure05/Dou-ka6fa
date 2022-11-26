@@ -120,6 +120,21 @@ export const updateCommandeToVente = async (req, res) => {
   }
 };
 
+export const updateOnlyCommande = async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const comm = await Commande.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ msg: "success" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(201).json({ msg: "error" });
+  }
+};
+
 async function increaseClientPoints(commandeId) {
   try {
     await Commande.findOne({

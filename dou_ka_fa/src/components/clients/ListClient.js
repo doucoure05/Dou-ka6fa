@@ -71,7 +71,7 @@ export default class ListClient extends Component {
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression.";
+          : "Suppression impossible! Nous avons des opérations lié à ce client.";
       this.toggleToastShow(msg);
     });
   };
@@ -88,84 +88,72 @@ export default class ListClient extends Component {
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
-              <div className="col-sm-6">
-                <h1>Liste des clients</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link className="nav-link" to="/home">
-                      Acceuil
-                    </Link>
-                  </li>
-                  <li className="breadcrumb-item active">Liste des clients</li>
-                </ol>
-              </div>
+              <div className="col-sm-6">{/* <h1>Liste des clients</h1> */}</div>
             </div>
           </div>
         </section>
+        <div className="dropdown-divider"></div>
         <section className="content">
           <div className="container-fluid">
-            {/* <Link to="/client/add" className="button is-success">
-            {
-              //Ajouter l'cone plus ici
-            }
-            Nouveau client
-          </Link> */}
-            <ClientModal
-              libelle={"Nouveau Client"}
-              add={true}
-              client={null}
-              btnStyle="btn btn-block btn-success"
-              btnIcon="bi-plus-circle"
-              onSave={this.onSave}
-            />
-            <table className="table">
-              <thead>
-                <tr>
-                  <th width={50}>ID</th>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Téléphone</th>
-                  <th>Adresse</th>
-                  <th>Pt Fidelité</th>
-                  <th width={100}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.listClient.map((client, index) => (
-                  <tr key={client.id}>
-                    <td>{client.id}</td>
-                    <td>{client.nom}</td>
-                    <td>{client.prenom}</td>
-                    <td>{client.telephone}</td>
-                    <td>{client.adresse}</td>
-                    <td>{client.point}</td>
-                    <td>
-                      {/* <Link
-                      to={`edit/${client.id}`}
-                      className="button is-small is-info"
-                    >
-                      Editer
-                    </Link> */}
-                      <ClientModal
-                        // title
-                        libelle={"Editer"}
-                        add={true}
-                        client={client}
-                        btnStyle="button is-small is-info"
-                        onSave={this.onUpdate}
-                        onDelete={this.onDelete}
-                        btnIcon="bi bi-pencil"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {this.state.listClient.length > 0 ? null : (
-              <h2 className="text-center display-4">Aucun élément trouvé</h2>
-            )}
+            <div className="col-md-12">
+              <div className="card card-success card-outline">
+                <div className="card-header">
+                  <h3 className="card-title">Liste des clients</h3>
+                </div>
+                <div className="card-body">
+                  <ClientModal
+                    libelle={"Nouveau Client"}
+                    add={true}
+                    client={null}
+                    btnStyle="btn btn-block btn-success"
+                    btnIcon="bi-plus-circle"
+                    onSave={this.onSave}
+                  />
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th width={50}>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Téléphone</th>
+                        <th>Adresse</th>
+                        <th>Pt Fidelité</th>
+                        <th width={100}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.listClient.map((client, index) => (
+                        <tr key={client.id}>
+                          <td>{client.id}</td>
+                          <td>{client.nom}</td>
+                          <td>{client.prenom}</td>
+                          <td>{client.telephone}</td>
+                          <td>{client.adresse}</td>
+                          <td>{client.point}</td>
+                          <td>
+                            <ClientModal
+                              // title
+                              libelle={"Editer"}
+                              add={true}
+                              client={client}
+                              btnStyle="button is-small is-info"
+                              onSave={this.onUpdate}
+                              onDelete={this.onDelete}
+                              btnIcon="bi bi-pencil"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {this.state.listClient.length > 0 ? null : (
+                    <h2 className="text-center display-4">
+                      Aucun élément trouvé
+                    </h2>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

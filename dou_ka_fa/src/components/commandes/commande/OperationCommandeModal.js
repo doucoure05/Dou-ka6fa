@@ -16,7 +16,8 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import Seuil from "../../../models/Seuil";
 import * as seuilService from "../../../services/SeuilService";
 
-import Spinner from "react-bootstrap/Spinner";
+import UserProfile from "../../../userProfile/UserProfile";
+import StatusSelector from "./StatusSelector";
 
 export default class OperationCommandeModal extends Component {
   constructor(props) {
@@ -242,6 +243,28 @@ export default class OperationCommandeModal extends Component {
       );
     });
   };
+
+  changeStatut = (statut) => {
+    // console.log("MA STATUT: ", statut);
+    if (statut != null) {
+      let comd = { ...this.state.commande, statut: statut };
+      console.log(comd);
+      service.updateOnlyCommande(comd).then((result) => {
+        let msg =
+          result.msg === "success"
+            ? "Etat modifié avec succès."
+            : "Une erreur est intervenu lors de l'annulation.";
+        this.setState(
+          {
+            toastShow: !this.state.toastShow,
+            toastLibelle: msg,
+          },
+          this.handleClose()
+        );
+      });
+    }
+  };
+
   doSave = () => {
     service.updateCommandeToVente(this.state.commande).then((result) => {
       // console.log(result);
@@ -325,7 +348,63 @@ export default class OperationCommandeModal extends Component {
           className="modal-dialog modal-xl"
           size="xl"
         >
-          <Modal.Header closeButton>
+          <Modal.Header closeButton={!this.props.add}>
+            {this.props.add && (
+              <div class="ribbon-wrapper ribbon-xl">
+                {/* <div class="ribbon bg-primary">Beaucoup de bla bla bla</div> */}
+
+                {
+                  this.props.commande.statut === 0 && (
+                    <div class="ribbon bg-secondary">
+                      <span style={{ fontSize: "10px" }}>
+                        En attente de préparation
+                      </span>
+                    </div>
+                  )
+                  // <span class="badge bg-secondary">EAPR</span>
+                }
+                {
+                  this.props.commande.statut === 1 && (
+                    <div class="ribbon bg-danger">
+                      <span style={{ fontSize: "10px" }}>
+                        En cours de préparation{" "}
+                      </span>{" "}
+                    </div>
+                  )
+                  // <span class="badge bg-danger">ECPR</span>
+                }
+                {
+                  this.props.commande.statut === 2 && (
+                    <div class="ribbon bg-warning">
+                      <span style={{ fontSize: "10px" }}>
+                        En attente de livraison{" "}
+                      </span>
+                    </div>
+                  )
+                  // <span class="badge bg-warning">EALI</span>
+                }
+                {
+                  this.props.commande.statut === 3 && (
+                    <div class="ribbon bg-primary">
+                      <span style={{ fontSize: "10px" }}>
+                        En cours de livraison
+                      </span>
+                    </div>
+                  )
+                  // <span class="badge bg-primary">ECLI</span>
+                }
+                {
+                  this.props.commande.statut === 4 && (
+                    <div class="ribbon bg-primary">
+                      <span style={{ fontSize: "10px" }}>
+                        En attente de payement
+                      </span>
+                    </div>
+                  )
+                  // <span class="badge bg-success">EAPA</span>
+                }
+              </div>
+            )}
             {this.props.add ? "Opération " : null}Commande N°
             {this.props.commande.id}
           </Modal.Header>
@@ -446,11 +525,22 @@ export default class OperationCommandeModal extends Component {
           </Modal.Body>
           {this.props.add ? (
             <Modal.Footer>
+              <StatusSelector onClose={this.changeStatut} />
+              <Button variant="danger" onClick={this.annulerCommande}>
+                Annuler la commande
+              </Button>
               <Button variant="success" onClick={this.doSave}>
                 Enregistrer la Vente
               </Button>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Fermer
+              </Button>
+            </Modal.Footer>
+          ) : null}
+          {UserProfile.getProfile() === "Administrateur" ? (
+            <Modal.Footer>
               <Button variant="danger" onClick={this.annulerCommande}>
-                Annuler la commande
+                Supprimer la vente
               </Button>
             </Modal.Footer>
           ) : null}

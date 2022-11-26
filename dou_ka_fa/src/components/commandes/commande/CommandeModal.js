@@ -13,7 +13,8 @@ import Categorie from "../../../models/Categorie";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import * as menuJourservice from "../../../services/PromotionService.js";
-import LignePromotionModal from "../../promotions-LignePromotion/promotion/LignePromotionModal"
+import LignePromotionModal from "../../promotions-LignePromotion/promotion/LignePromotionModal";
+import SelectClientModal from "./SelectClientModal";
 export default class CommandeModal extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +37,7 @@ export default class CommandeModal extends Component {
 
       globalLigneCommande: [],
       menuAddLigne: [],
+      client: null,
     };
   }
 
@@ -55,9 +57,7 @@ export default class CommandeModal extends Component {
     });
   };
 
-  doSave = () => {
-    // console.log("On Save");
-    console.log(this.state.commande);
+  realSave = () => {
     let success = false;
     service.createCommande(this.state.commande).then((article) => {
       if (article.id != null) {
@@ -66,7 +66,7 @@ export default class CommandeModal extends Component {
       if (success) {
         this.state.globalLigneCommande.forEach((ligne) => {
           ligne.commandeId = article.id;
-          service.createLigneCommande(ligne).then((response) => { });
+          service.createLigneCommande(ligne).then((response) => {});
         });
       }
       if (success) {
@@ -76,6 +76,24 @@ export default class CommandeModal extends Component {
         this.toggleToastShow("Une erreur est intervenu lors de l'opération.");
       }
     });
+  };
+
+  doSave = () => {
+    if (this.state.client != null) {
+      this.setState(
+        {
+          commande: {
+            ...this.state.commande,
+            clientId: this.state.client.id,
+          },
+        },
+        () => {
+          this.realSave();
+        }
+      );
+    } else {
+      this.realSave();
+    }
   };
 
   getLIstClient() {
@@ -97,7 +115,7 @@ export default class CommandeModal extends Component {
         {
           listClient: list,
         },
-        () => { }
+        () => {}
       );
     });
   }
@@ -183,12 +201,17 @@ export default class CommandeModal extends Component {
         Number(this.state.menuJour.prixPromotion);
     }
 
-    this.setState({
-      commande: {
-        ...this.state.commande,
-        total: somme,
+    this.setState(
+      {
+        commande: {
+          ...this.state.commande,
+          total: somme,
+        },
       },
-    });
+      () => {
+        this.checkForm();
+      }
+    );
   }
 
   addToLigne = (event) => {
@@ -267,6 +290,7 @@ export default class CommandeModal extends Component {
         ligneMenuJour: [],
         globalLigneCommande: [],
         menuAddLigne: [],
+        client: null,
       },
       this.getMenuJour()
     );
@@ -274,9 +298,6 @@ export default class CommandeModal extends Component {
   };
 
   handleChange(event) {
-    // console.log(this.fiel);
-    // event.preventDefault();
-    // event.preventDefault();
     let fieldName = event.target.name;
     let fleldVal = event.target.value;
     this.setState(
@@ -418,7 +439,6 @@ export default class CommandeModal extends Component {
       },
       () => {
         this.calculTotal();
-        this.checkForm();
       }
     );
   }
@@ -441,20 +461,24 @@ export default class CommandeModal extends Component {
   checkForm() {
     let isclient = true;
     let isligne = false;
-    if (this.state.commande !== null) {
-      // if (this.state.commande.clientId != null) {
-      //   if (this.state.commande.clientId > 0) {
-      //     isclient = true;
-      //   }
-      // }
+    let islieuLivrason = true;
+    if (this.state.commande != null) {
       if (this.state.globalLigneCommande != null) {
         if (this.state.globalLigneCommande.length > 0) {
           isligne = true;
         }
       }
+      if (this.state.commande.lieuLivraison != null) {
+        if (this.state.commande.lieuLivraison.length > 0) {
+          // islieuLivrason = true;
+          if (this.state.client === null) {
+            isclient = false;
+          }
+        }
+      }
     }
     this.setState({
-      formOK: isclient && isligne,
+      formOK: isclient && isligne && islieuLivrason,
     });
   }
 
@@ -491,16 +515,30 @@ export default class CommandeModal extends Component {
     this.getLIstClient();
   }
 
+  choseClient = (client) => {
+    this.setState({ client: client }, () => {
+      this.checkForm();
+    });
+  };
+
+  closeClient = () => {
+    this.setState({ client: null }, () => {
+      this.checkForm();
+    });
+  };
+
   render() {
     return (
       <>
-        <Button
-          disabled={this.state.show}
-          className={this.props.btnStyle}
-          onClick={this.handleShow}
-        >
-          <i className={this.props.btnIcon}></i> {this.props.libelle}
-        </Button>
+        <div className="mb-4">
+          <Button
+            disabled={this.state.show}
+            className={this.props.btnStyle}
+            onClick={this.handleShow}
+          >
+            <i className={this.props.btnIcon}></i> {this.props.libelle}
+          </Button>
+        </div>
 
         <Modal
           show={this.state.show}
@@ -517,65 +555,47 @@ export default class CommandeModal extends Component {
             <Modal.Title>Nouvelle Commande</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              {/* <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Client</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Entrer le nom de l'article"
-                    value={
-                      this.state.article != null ? this.state.article.nom : ""
-                    }
-                    name="nom"
-                    // onChange={this.handleChange.bind(this)}
-                  />
-                </Form.Group> */}
-              <div className="row">
-                <div className="col-sm-6">
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Client</Form.Label>
-                    <Form.Select
-                      aria-label="Default select example"
-                      name="clientId"
-                      value={
-                        this.state.commande != null
-                          ? this.state.commande.clientId
-                          : 0
-                      }
-                      onChange={this.handleChange.bind(this)}
+            <div className="row">
+              <div className="col-sm-6">
+                {this.state.client === null ? (
+                  <SelectClientModal onClose={this.choseClient} />
+                ) : (
+                  <p
+                    style={{
+                      position: "relative",
+                      top: "2.3rem",
+                      fontSize: "15px",
+                    }}
+                  >
+                    <strong>Client:</strong> {this.state.client.nom}{" "}
+                    {this.state.client.prenom} ({this.state.client.telephone})
+                    <Button
+                      className="ml-1 btn btn-sm"
+                      variant="danger"
+                      onClick={this.closeClient}
                     >
-                      <option value={0}>Selectionner un client</option>
-                      {this.state.listClient.map((client, index) => (
-                        <option key={client.id} value={client.id}>
-                          {client.nom +
-                            " " +
-                            client.prenom +
-                            "(" +
-                            client.telephone +
-                            ")"}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </div>
-                <div className="col-sm-6">
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Total</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="0"
-                      disabled
-                      value={
-                        this.state.commande != null
-                          ? this.state.commande.total
-                          : 0
-                      }
-                      name="total"
-                    />
-                  </Form.Group>
-                </div>
+                      <i className="bi bi-x"></i>
+                    </Button>
+                  </p>
+                )}
               </div>
-            </Form>
+              <div className="col-sm-6">
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Lieu de Livraison</Form.Label>
+                  <Form.Control
+                    type="Text"
+                    placeholder="Ex: table 2 ou Hamdallaye ACI"
+                    value={
+                      this.state.commande != null
+                        ? this.state.commande.lieuLivraison
+                        : ""
+                    }
+                    name="lieuLivraison"
+                    onChange={this.handleChange.bind(this)}
+                  />
+                </Form.Group>
+              </div>
+            </div>
             {this.state.menuJour != null ? (
               <div>
                 <div className="dropdown-divider"></div>
@@ -606,7 +626,7 @@ export default class CommandeModal extends Component {
                             min={1}
                             value={
                               this.state.commande != null &&
-                                this.state.commande.qtePromotion != null
+                              this.state.commande.qtePromotion != null
                                 ? this.state.commande.qtePromotion
                                 : ""
                             }
@@ -630,16 +650,13 @@ export default class CommandeModal extends Component {
                       <div className="col-md-3">
                         <LignePromotionModal
                           // title
-                          libelle={"Voir étails"}
+                          libelle={"Voir détails"}
                           add={true}
                           LPpromo={this.state.menuJour}
                           idpro={this.state.menuJour.id}
                           btnStyle="btn btn-block btn-secondary btn-sm"
                           btnIcon="bi bi-eye"
-                          style={{
-                            position: "relative",
-                            top: "3rem",
-                          }}
+                          myStyles='position: "relative", top: "3rem"  '
                         />
                       </div>
                     </div>
@@ -743,6 +760,21 @@ export default class CommandeModal extends Component {
                 ))}
               </tbody>
             </table>
+            <div className="dropdown-divider"></div>
+            <div className="col-sm-12">
+              <p
+                className="text-center"
+                style={{ fontSize: "20px", fontWeight: "bold" }}
+              >
+                TOTAL
+              </p>
+              <p
+                className="text-center"
+                style={{ fontSize: "20px", fontWeight: "bold" }}
+              >
+                {this.state.commande != null ? this.state.commande.total : 0}
+              </p>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button

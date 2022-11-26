@@ -1,22 +1,25 @@
-import {Sequelize} from "sequelize";
+import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
 
-const {DataTypes} = Sequelize;
+const { DataTypes } = Sequelize;
 
-const User = db.define('users', {
+const User = db.define(
+  "users",
+  {
     nom: DataTypes.STRING,
     prenom: DataTypes.STRING,
     telephone: DataTypes.STRING,
     login: DataTypes.STRING,
     password: DataTypes.STRING,
     profil: DataTypes.STRING,
-    gender: DataTypes.STRING,
-},{
-    freezeTableName: true
-});
+  },
+  {
+    freezeTableName: true,
+  }
+);
 
 export default User;
 
-(async()=>{
-     await db.sync();
+(async () => {
+  await db.sync();
 })();

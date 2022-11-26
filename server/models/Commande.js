@@ -27,11 +27,6 @@ const Commande = db.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-
-    // addPromotion: {
-    //   type: DataTypes.INTEGER,
-    //   defaultValue: 0,
-    // },
     clientId: {
       type: DataTypes.INTEGER,
       references: { model: "clients", key: "id" },
@@ -39,6 +34,16 @@ const Commande = db.define(
     promotionId: {
       type: DataTypes.INTEGER,
       references: { model: "promotions", key: "id" },
+    },
+    lieuLivraison: DataTypes.STRING,
+    statut: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      //0: en attente de préparation
+      //1: En cous de préparation
+      //2: En Attente de livrason
+      //3: En cours de livraison
+      //4: En Attente de paiement
     },
   },
   {

@@ -29,8 +29,20 @@ export default class LignePromotionModal extends Component {
         ? this.state.listeArticle.filter((c) => c.id === id)[0]
         : null;
     if (cat != null) {
+      return cat.nom + "(" + this.getCategorieName(cat.categorieId) + ")";
+    } else return "";
+  };
+
+  getCategorieName = (id) => {
+    let cat =
+      this.state.listCategorie.filter((c) => Number(c.id) === Number(id))
+        .length > 0
+        ? this.state.listCategorie.filter((c) => Number(c.id) === Number(id))[0]
+        : null;
+    if (cat != null) {
       return cat.nom;
     } else return "";
+    // return cat.nom;
   };
 
   getLIstCategorie() {
@@ -83,6 +95,7 @@ export default class LignePromotionModal extends Component {
   componentDidMount() {
     this.getLIstArticle();
     this.getLIstCategorie();
+    console.log(this.props.myStyles);
     //this.getLignePromotion();
   }
 
@@ -107,32 +120,45 @@ export default class LignePromotionModal extends Component {
   formatDate = (date) => {
     let dt = date.split("-");
     let dtt = dt[2].split("T");
-    return dtt[0] + "/" + dt[1] + "/" + dt[0] + " à " + dtt[1].split(".")[0];
+    return dtt[0] + "/" + dt[1] + "/" + dt[0];
   };
 
   getLigneByPromo = () => {
-    LignePromotionService.getLigneByPromotion(this.props.idpro).then((lignes) => {
-      let list = [];
-      lignes.forEach((ligne) => {
-        let ar = new LignePromotion(ligne);
-        list.push(ar);
-      });
-      this.setState(
-        {
-          lignePromotionFiltered: list,
-        },
-        () => {
-          console.log("this ins the filtered liste",this.state.lignePromotionFiltered);
-        }
-      );
-    });
+    LignePromotionService.getLigneByPromotion(this.props.idpro).then(
+      (lignes) => {
+        let list = [];
+        lignes.forEach((ligne) => {
+          let ar = new LignePromotion(ligne);
+          list.push(ar);
+        });
+        this.setState(
+          {
+            lignePromotionFiltered: list,
+          },
+          () => {
+            console.log(
+              "this ins the filtered liste",
+              this.state.lignePromotionFiltered
+            );
+          }
+        );
+      }
+    );
   };
 
   render() {
     return (
       <>
         <div className={this.props.LPpromo === null ? "mb-4" : ""}>
-          <Button className={this.props.btnStyle} onClick={this.handleShow}>
+          <Button
+            style={
+              this.props.myStyles != null
+                ? { position: "relative", top: "2rem" }
+                : {}
+            }
+            className={this.props.btnStyle}
+            onClick={this.handleShow}
+          >
             <i className={this.props.btnIcon}></i> {this.props.libelle}
           </Button>
         </div>
@@ -148,18 +174,32 @@ export default class LignePromotionModal extends Component {
           className="modal-dialog "
         >
           <Modal.Header closeButton>
-            <Modal.Title>Menu du jour au <strong>{this.formatDate(this.props.LPpromo.datePromotion)}</strong></Modal.Title>
+            <Modal.Title>
+              <p>
+                Détails menu du jour (
+                <strong>
+                  {this.formatDate(this.props.LPpromo.datePromotion)}
+                </strong>
+                )
+              </p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <p
+            {/* <Form> */}
+            {/* <p
                 className="text-center"
                 style={{ fontSize: "20px", fontWeight: "bold" }}
               >
-                <i className="bi bi-card-list" ></i> Infos menu
+                <i className="bi bi-card-list"></i> Infos menu
               </p>
-              <div className="dropdown-divider"></div>
-              <div className="row">
+              <div className="dropdown-divider"></div> */}
+            <p className="text-left mb-2">
+              Libelle: <strong>{this.props.LPpromo.libelle}</strong>
+            </p>
+            <p className="text-left">
+              Prix: <strong>{this.props.LPpromo.prixPromotion}</strong>
+            </p>
+            {/* <div className="row">
                 <div className="col-sm-6">
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Libellé</Form.Label>
@@ -172,30 +212,30 @@ export default class LignePromotionModal extends Component {
                     <p>{this.props.LPpromo.prixPromotion} </p>
                   </Form.Group>
                 </div>
-              </div>
-            </Form>
+              </div> */}
+            {/* </Form> */}
             <div className="dropdown-divider"></div>
-            <br/>
-            <p
+            <p className="text-center">Contenu</p>
+            {/* <p
               className="text-center"
               style={{ fontSize: "20px", fontWeight: "bold" }}
             >
-              <i className="bi bi-cart" ></i> Plat
-            </p>
-            
+              <i className="bi bi-cart"></i> Plat
+            </p> */}
+
             <table className="table">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Article</th>
-                  <th>Quantité</th>
+                  <th width={50}>#</th>
+                  <th>Nom(Catégorie)</th>
+                  <th width={100}>Qte</th>
                 </tr>
               </thead>
               <tbody>
                 <script>let tdindex = document.getElementById("index")</script>
                 {this.state.lignePromotionFiltered.map((LP, index) => (
                   <tr key={LP.id}>
-                    <td>{LP.id}</td>
+                    <td>{index}</td>
                     <td>{this.getArticleName(LP.articleId)}</td>
                     <td>{LP.qte}</td>
                   </tr>
@@ -203,7 +243,6 @@ export default class LignePromotionModal extends Component {
               </tbody>
             </table>
           </Modal.Body>
-
         </Modal>
       </>
     );

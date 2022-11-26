@@ -182,8 +182,8 @@ export default class Dashboard extends Component {
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
-                <div className="col-sm-6">
-                  <h1>Acceuil</h1>
+                <div className="col-sm-12 text-center">
+                  {/* <h1>WELCOME</h1> */}
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@ export default class Dashboard extends Component {
                       {/* <span className="fas fa-user"></span> */}
                       <i
                         style={{ color: "white" }}
-                        className="bi bi-shop-window"
+                        className="bi bi-people"
                       ></i>
                     </div>
                   </div>
@@ -263,7 +263,7 @@ export default class Dashboard extends Component {
               <div className="dropdown-divider"></div>
               <div className="row">
                 <div className="col-md-6">
-                  <div className="card">
+                  <div className="card card-success card-outline">
                     <div className="card-header">
                       <h3 className="card-title">
                         Clients les <strong>+ fidèle</strong>
@@ -305,7 +305,7 @@ export default class Dashboard extends Component {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <div className="card">
+                  <div className="card card-success card-outline">
                     <div className="card-header">
                       <h3 className="card-title">
                         Menus les <strong>+ vendu</strong>

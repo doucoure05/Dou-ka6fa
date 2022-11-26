@@ -53,3 +53,20 @@ export const saveClient = async (client) => {
     return null;
   }
 };
+
+export const saveAndReturnClient = async (client) => {
+  try {
+    const response = await axios.post("http://localhost:5000/clientR", {
+      nom: client.nom,
+      prenom: client.prenom,
+      telephone: client.telephone,
+      adresse: client.adresse,
+      point: client.point,
+      photo: client.photo,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

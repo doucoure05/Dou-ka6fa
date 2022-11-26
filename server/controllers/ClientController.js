@@ -2,7 +2,9 @@ import Client from "../models/Client.js";
 
 export const getClient = async (req, res) => {
   try {
-    const response = await Client.findAll();
+    const response = await Client.findAll({
+      order: [["point", "DESC"]],
+    });
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
@@ -54,6 +56,16 @@ export const deleteClient = async (req, res) => {
       },
     });
     res.status(200).json({ msg: "success" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(201).json({ msg: "error" });
+  }
+};
+
+export const createAndReturnClient = async (req, res) => {
+  try {
+    const comm = await (await Client.create(req.body)).dataValues;
+    res.status(201).json(comm);
   } catch (error) {
     console.log(error.message);
     res.status(201).json({ msg: "error" });

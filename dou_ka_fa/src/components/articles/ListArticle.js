@@ -12,6 +12,9 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import Categorie from "../../models/Categorie.js";
 import MenuJour from "./MenuJour.js";
 
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/esm/Button.js";
+
 export default class ListArticle extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +23,73 @@ export default class ListArticle extends Component {
       toastShow: false,
       toastLibelle: "",
       listCategorie: [],
+      tableRows: [],
+      searchWord: "",
+      formOK: false,
     };
   }
+
+  handleChange(event) {
+    let fleldVal = event.target.value;
+    this.setState(
+      {
+        searchWord: fleldVal,
+      },
+      () => {
+        this.checkForm();
+      }
+    );
+  }
+
+  checkForm() {
+    let isword = false;
+
+    if (this.state.searchWord != null) {
+      if (this.state.searchWord.length > 0) {
+        isword = true;
+      }
+    }
+
+    this.setState({
+      formOK: isword,
+    });
+  }
+
+  search = () => {
+    if (this.state.searchWord.length > 0) {
+      if (this.state.searchWord.split("#").length > 1) {
+        if (this.state.searchWord.split("#")[0].toLowerCase() === "c") {
+          this.setState({
+            tableRows: [...this.state.listArticle].filter((art) =>
+              art.categorieName.includes(this.state.searchWord.split("#")[1])
+            ),
+          });
+        } else if (this.state.searchWord.split("#")[0].toLowerCase() === "n") {
+          this.setState({
+            tableRows: [...this.state.listArticle].filter((art) =>
+              art.nom.includes(this.state.searchWord.split("#")[1])
+            ),
+          });
+        }
+      } else {
+        this.setState({
+          tableRows: [...this.state.listArticle].filter(
+            (art) =>
+              art.nom.includes(this.state.searchWord) ||
+              art.description.includes(this.state.searchWord) ||
+              art.qteJour.toString().includes(this.state.searchWord) ||
+              art.prix.toString().includes(this.state.searchWord) ||
+              art.point.toString().includes(this.state.searchWord) ||
+              art.categorieName.includes(this.state.searchWord)
+          ),
+        });
+      }
+    } else {
+      this.setState({
+        tableRows: [...this.state.listArticle],
+      });
+    }
+  };
 
   getCategorieName = (id) => {
     let cat =
@@ -46,6 +114,7 @@ export default class ListArticle extends Component {
           listCategorie: list,
         },
         () => {
+          this.getLIstArticle();
           //   console.log(this.state.listCategorie);
         }
       );
@@ -66,11 +135,13 @@ export default class ListArticle extends Component {
           article.point,
           article.categorieId
         );
+        ar.categorieName = this.getCategorieName(ar.categorieId);
         list.push(ar);
       });
       this.setState(
         {
           listArticle: list,
+          tableRows: [...list],
         },
         () => {
           //   console.log(this.state.listArticle);
@@ -109,7 +180,7 @@ export default class ListArticle extends Component {
       let msg =
         result.msg === "success"
           ? "Suppression effectué avec succès."
-          : "Une erreur est intervenu lors de la suppression.";
+          : "Suppression impossible! Ce article est utilisé dans des Opérations.";
       this.toggleToastShow(msg);
     });
   };
@@ -125,19 +196,9 @@ export default class ListArticle extends Component {
       <>
         <section className="content-header">
           <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-sm-6">
+            <div className="row">
+              <div className="col-sm-12 text-center">
                 <h1>MENUS</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link className="nav-link" to="/home">
-                      Acceuil
-                    </Link>
-                  </li>
-                  <li className="breadcrumb-item active">Menu</li>
-                </ol>
               </div>
             </div>
           </div>
@@ -171,6 +232,42 @@ export default class ListArticle extends Component {
                       btnIcon="bi-plus-circle"
                       onSave={this.onSave}
                     />
+                    <div className="row">
+                      <div className="col-md-9"></div>
+                      <div className="col-md-3">
+                        <div className="row">
+                          <div className="col-md-9">
+                            <Form>
+                              <Form.Group className="mb-3">
+                                <Form.Control
+                                  size="sm"
+                                  type="text"
+                                  placeholder="Recherche"
+                                  value={this.state.searchWord}
+                                  name="word"
+                                  autoComplete="off"
+                                  onChange={this.handleChange.bind(this)}
+                                />
+                                {/* <Form.Text className="text-muted">
+                                  <p className="mb-1">*Par Categorie: c#mot</p>
+                                  <p>*Par Nom: c#mot</p>
+                                </Form.Text> */}
+                              </Form.Group>
+                            </Form>
+                          </div>
+                          <div className="col-md-3">
+                            <Button
+                              // disabled={!this.state.formOK}
+                              className="btn btn-block btn-sm"
+                              variant="success"
+                              onClick={this.search}
+                            >
+                              <i className="bi bi-search"></i>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                     <table className="table">
                       <thead>
@@ -186,7 +283,7 @@ export default class ListArticle extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.state.listArticle.map((article, index) => (
+                        {this.state.tableRows.map((article, index) => (
                           <tr key={article.id}>
                             <td>{index + 1}</td>
                             <td>{article.nom}</td>
@@ -195,7 +292,8 @@ export default class ListArticle extends Component {
                             <td>{article.prix}</td>
                             <td>{article.point}</td>
                             <td>
-                              {this.getCategorieName(article.categorieId)}
+                              {article.categorieName}
+                              {/* {this.getCategorieName(article.categorieId)} */}
                             </td>
 
                             <td>
@@ -213,7 +311,7 @@ export default class ListArticle extends Component {
                         ))}
                       </tbody>
                     </table>
-                    {this.state.listArticle.length > 0 ? null : (
+                    {this.state.tableRows.length > 0 ? null : (
                       <h2 className="text-center display-4">
                         Aucun élément trouvé
                       </h2>

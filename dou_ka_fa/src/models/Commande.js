@@ -10,7 +10,9 @@ export default class Commande {
     etat,
     clientId,
     qtePromotion,
-    promotionId
+    promotionId,
+    lieuLivraison,
+    statut
   ) {
     this.id = id;
     this.dateCommande = dateCommande;
@@ -23,5 +25,7 @@ export default class Commande {
     this.clientId = clientId;
     this.qtePromotion = qtePromotion;
     this.promotionId = promotionId;
+    this.lieuLivraison = lieuLivraison;
+    this.statut = statut;
   }
 }
